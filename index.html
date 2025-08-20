@@ -1,0 +1,2900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOTIBEE by Cortexo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#F59E0B', // Honey amber
+                        'bee-yellow': '#FCD34D',
+                        'bee-black': '#1F2937',
+                        'hive-gold': '#D97706',
+                        'queen-purple': '#7C3AED',
+                        'worker-blue': '#3B82F6'
+                    },
+                    animation: {
+                        'buzz': 'buzz 0.5s ease-in-out infinite alternate',
+                        'hover-float': 'hoverFloat 2s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'fade-in': 'fadeIn 0.5s ease-out'
+                    },
+                    keyframes: {
+                        buzz: {
+                            '0%': { transform: 'translateX(-2px) rotate(-1deg)' },
+                            '100%': { transform: 'translateX(2px) rotate(1deg)' }
+                        },
+                        hoverFloat: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-5px)' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hexagon {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+        .hive-pattern {
+            background-image: radial-gradient(circle at 25% 25%, #FCD34D 2px, transparent 2px),
+                              radial-gradient(circle at 75% 75%, #F59E0B 2px, transparent 2px);
+            background-size: 40px 40px;
+        }
+        .bee-glow {
+            filter: drop-shadow(0 0 10px #FCD34D);
+        }
+    </style>
+</head>
+<body class="bg-amber-50 dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen transition-colors">
+    
+    <!-- Sign Up / Welcome Screen -->
+    <div id="welcomeScreen" class="fixed inset-0 bg-gradient-to-br from-amber-50 to-yellow-100 z-50 flex flex-col">
+        <!-- Scrollable Content Area -->
+        <div class="flex-1 overflow-y-auto p-4">
+            <div class="max-w-4xl w-full mx-auto pt-8">
+                <!-- Main Sign Up Card -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 animate-slide-up mb-6 border-4 border-bee-yellow">
+                    <div class="text-center mb-6">
+                        <div class="mb-4 flex justify-center">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/5df06403af5debb88dce6e30e861630dafe167903119e261dd46e184b81e5332?w=2231&h=642" alt="MOTIBEE Logo" class="h-16 w-auto animate-hover-float">
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-xl">Where classrooms become thriving hives!</p>
+                    </div>
+
+                    <!-- Role Selection Tabs -->
+                    <div class="flex border-b border-gray-200 dark:border-gray-600 mb-6">
+                        <button onclick="switchSignUpTab('worker')" id="workerSignUpTab" class="flex-1 px-4 py-3 font-medium border-b-2 border-primary text-primary">
+                            🐝 Worker Bee (Student)
+                        </button>
+                        <button onclick="switchSignUpTab('queen')" id="queenSignUpTab" class="flex-1 px-4 py-3 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                            👑 Queen Bee (Teacher)
+                        </button>
+                    </div>
+
+                    <!-- Worker Bee (Student) Sign Up Form -->
+                    <div id="workerSignUpForm" class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Worker Bee Name</label>
+                                <input type="text" id="workerUsername" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Your hive worker name">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                                <input type="email" id="workerEmail" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="worker@school.edu">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Grade Level</label>
+                                <select id="workerGrade" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                    <option value="">Select your grade</option>
+                                    <option value="6">6th Grade</option>
+                                    <option value="7">7th Grade</option>
+                                    <option value="8">8th Grade</option>
+                                    <option value="9">9th Grade</option>
+                                    <option value="10">10th Grade</option>
+                                    <option value="11">11th Grade</option>
+                                    <option value="12">12th Grade</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+                                <input type="password" id="workerPassword" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Create a strong password" oninput="checkPasswordStrength('worker')">
+                                <div class="mt-2">
+                                    <div class="text-xs text-gray-600 dark:text-gray-400 mb-2">Password must include:</div>
+                                    <div class="grid grid-cols-2 gap-1 text-xs">
+                                        <div id="workerReq1" class="flex items-center text-gray-500">
+                                            <span class="mr-1">○</span> 8+ characters
+                                        </div>
+                                        <div id="workerReq2" class="flex items-center text-gray-500">
+                                            <span class="mr-1">○</span> Uppercase letter
+                                        </div>
+                                        <div id="workerReq3" class="flex items-center text-gray-500">
+                                            <span class="mr-1">○</span> Lowercase letter
+                                        </div>
+                                        <div id="workerReq4" class="flex items-center text-gray-500">
+                                            <span class="mr-1">○</span> Number
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Confirm Password</label>
+                                <input type="password" id="workerConfirmPassword" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Re-enter your password" oninput="checkPasswordMatch('worker')">
+                                <div id="workerPasswordMatch" class="mt-1 text-xs hidden"></div>
+                            </div>
+
+                            <button onclick="signUpWorker()" class="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary/90 transition-colors font-medium text-base">
+                                Join the Hive! 🐝
+                            </button>
+                            
+                            <div class="text-center text-sm text-gray-500 dark:text-gray-400">
+                                Work together to maintain your classroom hive!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Queen Bee (Teacher) Sign Up Form -->
+                    <div id="queenSignUpForm" class="grid md:grid-cols-2 gap-6 hidden">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Queen Bee Name</label>
+                                <input type="text" id="queenUsername" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-queen-purple focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Ms. Johnson">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">School Email</label>
+                                <input type="email" id="queenEmail" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-queen-purple focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="queen@school.edu">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject Area</label>
+                                <select id="queenSubject" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-queen-purple focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                    <option value="">Select your primary subject</option>
+                                    <option value="math">Mathematics</option>
+                                    <option value="science">Science</option>
+                                    <option value="english">English/Language Arts</option>
+                                    <option value="history">History/Social Studies</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">School/District</label>
+                                <input type="text" id="schoolName" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-queen-purple focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Washington School District">
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+                                <input type="password" id="queenPassword" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-queen-purple focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Create a secure password" oninput="checkPasswordStrength('queen')">
+                                <div class="mt-2">
+                                    <div class="text-xs text-gray-600 dark:text-gray-400 mb-2">Password must include:</div>
+                                    <div class="grid grid-cols-2 gap-1 text-xs">
+                                        <div id="queenReq1" class="flex items-center text-gray-500">
+                                            <span class="mr-1">○</span> 8+ characters
+                                        </div>
+                                        <div id="queenReq2" class="flex items-center text-gray-500">
+                                            <span class="mr-1">○</span> Uppercase letter
+                                        </div>
+                                        <div id="queenReq3" class="flex items-center text-gray-500">
+                                            <span class="mr-1">○</span> Lowercase letter
+                                        </div>
+                                        <div id="queenReq4" class="flex items-center text-gray-500">
+                                            <span class="mr-1">○</span> Number
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Confirm Password</label>
+                                <input type="password" id="queenConfirmPassword" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-queen-purple focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Re-enter your password" oninput="checkPasswordMatch('queen')">
+                                <div id="queenPasswordMatch" class="mt-1 text-xs hidden"></div>
+                            </div>
+
+                            <button onclick="signUpQueen()" class="w-full bg-queen-purple text-white py-3 rounded-lg hover:bg-purple-700 transition-colors font-medium text-base">
+                                Establish Your Hive! 👑
+                            </button>
+                            
+                            <div class="text-center text-sm text-gray-500 dark:text-gray-400">
+                                Lead your worker bees to success!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo & Pricing Section -->
+                <div class="grid md:grid-cols-2 gap-4 mb-8">
+                    <!-- Demo Section -->
+                    <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-lg p-6 border-2 border-bee-yellow">
+                        <div class="text-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Try Hive Demo</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Experience both worker and queen perspectives</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="enterWorkerDemo()" class="bg-bee-yellow text-bee-black py-3 rounded-lg hover:bg-yellow-400 transition-colors font-medium text-sm">
+                                🐝 Worker Demo
+                            </button>
+                            <button onclick="enterQueenDemo()" class="bg-queen-purple text-white py-3 rounded-lg hover:bg-purple-700 transition-colors font-medium text-sm">
+                                👑 Queen Demo
+                            </button>
+                        </div>
+                        
+                        <div class="mt-3 text-xs text-center text-gray-400 dark:text-gray-500">
+                            ⚠️ Demo progress won't be saved
+                        </div>
+                    </div>
+
+                    <!-- B2B Pricing Section -->
+                    <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-lg p-6 border-2 border-bee-yellow">
+                        <div class="text-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">School Pricing</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">District & enterprise solutions</p>
+                        </div>
+                        
+                        <button onclick="openSubscriptionModal()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white py-3 rounded-lg hover:from-amber-600 hover:to-yellow-600 transition-all font-medium text-sm">
+                            🏫 View School Plans
+                        </button>
+                        
+                        <div class="mt-3 text-xs text-center text-gray-400 dark:text-gray-500">
+                            Volume discounts available
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Universal Footer - Also shown on welcome screen -->
+        <div class="flex-shrink-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-t border-gray-200 dark:border-gray-600 px-4 py-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/be94ad793df5c5fef6abb3606c29b6e8f15daaa53635ceb2e12adf1f3817c520?w=1080&h=1080" alt="Cortexo Logo" class="w-12 h-12 rounded-lg">
+                        <div>
+                            <div class="text-lg font-bold text-gray-800 dark:text-gray-200">Cortexo</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Where Education Meets Adventure</div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center md:text-right">
+                        <div class="text-sm text-gray-600 dark:text-gray-400">
+                            © 2025 Cortexo. All rights reserved.
+                        </div>
+                        <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                            Transforming learning into epic adventures
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Mode Banner -->
+    <div id="demoBanner" class="bg-gradient-to-r from-amber-400 to-yellow-500 text-bee-black py-2 px-4 text-center text-sm font-medium hidden">
+        🐝 Hive Demo Mode - Progress won't be saved | 
+        <button onclick="showWelcomeScreen()" class="underline hover:no-underline ml-2">Join the Real Hive</button>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-lg border-b-4 border-bee-yellow">
+        <div class="max-w-6xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between min-h-[48px]">
+                <div class="flex items-center space-x-3 min-w-0">
+                    <!-- Back Button (for authenticated users) -->
+                    <button id="backButton" onclick="goBack()" class="hidden flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 px-2 py-1 rounded transition-colors">
+                        <span>←</span>
+                        <span class="hidden md:inline">Back</span>
+                    </button>
+                    
+                    <img src="https://pfst.cf2.poecdn.net/base/image/5df06403af5debb88dce6e30e861630dafe167903119e261dd46e184b81e5332?w=2231&h=642" alt="MOTIBEE Logo" class="h-10 w-auto">
+                </div>
+                <div class="flex items-center space-x-2 md:space-x-4 min-w-0">
+                    <div class="flex items-center space-x-2 min-w-0">
+                        <span id="userWelcome" class="text-sm text-gray-600 dark:text-gray-400 hidden truncate">Welcome, <span id="displayUsername" class="font-semibold"></span>!</span>
+                    </div>
+                    
+                    <!-- Back to Join Hive Button (for demo users) -->
+                    <button id="backToJoinBtn" onclick="showWelcomeScreen()" class="hidden flex items-center space-x-1 md:space-x-2 bg-worker-blue text-white hover:bg-blue-700 px-2 md:px-4 py-2 rounded-lg transition-colors font-medium text-sm whitespace-nowrap">
+                        <span class="hidden md:inline">← Join Real Hive</span>
+                        <span class="md:hidden">← Join</span>
+                    </button>
+                    
+                    <button onclick="openBeeCustomization()" class="flex items-center space-x-1 md:space-x-2 bg-amber-600 text-white hover:bg-amber-700 px-2 md:px-4 py-2 rounded-lg transition-colors font-medium text-sm whitespace-nowrap">
+                        <div id="headerBee" class="text-sm animate-buzz">🐝</div>
+                        <span class="hidden md:inline">Customize</span>
+                    </button>
+                    
+                    <!-- Queen Mode Toggle -->
+                    <button id="queenModeBtn" onclick="toggleQueenMode()" class="hidden flex items-center space-x-1 md:space-x-2 bg-queen-purple text-white hover:bg-purple-700 px-2 md:px-4 py-2 rounded-lg transition-colors font-medium text-sm whitespace-nowrap">
+                        <span class="hidden md:inline">👑 Queen Mode</span>
+                        <span class="md:hidden">👑</span>
+                    </button>
+                    
+                    <div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
+                        Hive <span id="currentHive" class="font-semibold">Alpha</span>
+                    </div>
+                    <div class="text-xs md:text-sm whitespace-nowrap">
+                        <span class="text-gray-600 dark:text-gray-400 hidden md:inline">Health Check:</span>
+                        <span class="text-gray-600 dark:text-gray-400 md:hidden">Health:</span>
+                        <span id="hiveHealth" class="font-semibold text-primary ml-1">🍯 Strong</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-6xl mx-auto px-4 py-6 space-y-8">
+        <!-- Hive Central -->
+        <div class="bg-gradient-to-br from-amber-400 via-yellow-400 to-amber-500 rounded-2xl p-8 text-bee-black relative overflow-hidden hive-pattern">
+            <div class="bg-white/20 rounded-xl p-6 backdrop-blur-sm">
+                <h2 class="text-3xl font-bold text-center mb-6">🏠 Hive Central</h2>
+                
+                <!-- Collaboration Mode Selection -->
+                <div class="flex justify-center mb-8">
+                    <div class="bg-white/30 rounded-lg p-2 flex space-x-2">
+                        <button onclick="switchHiveMode('tasks')" id="tasksHiveBtn" class="px-4 py-2 rounded-md bg-white/40 text-bee-black font-medium transition-all">
+                            🍯 Hive Tasks
+                        </button>
+                        <button onclick="switchHiveMode('workers')" id="workersHiveBtn" class="px-4 py-2 rounded-md text-bee-black/70 hover:bg-white/20 font-medium transition-all">
+                            👥 Worker Board
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Hive Tasks View -->
+                <div id="hiveTasksView" class="grid md:grid-cols-3 gap-8 items-center">
+                    <!-- Your Worker Status -->
+                    <div class="text-center space-y-4">
+                        <div class="relative">
+                            <div id="workerBee" class="text-8xl mx-auto bee-glow transition-all duration-500 animate-hover-float">
+                                🐝
+                            </div>
+                            <div id="workerRank" class="absolute -top-2 -right-2 bg-worker-blue text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg">
+                                3
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold">Your Worker Status</h3>
+                        <div id="workerTitle" class="text-sm font-semibold text-blue-800 mb-2">Busy Bee</div>
+                        <div class="bg-white/30 rounded-lg p-4">
+                            <div class="text-sm opacity-90 mb-2">Rank 3 Progress</div>
+                            <div class="bg-white/50 rounded-full h-6 overflow-hidden mb-2">
+                                <div id="workerProgressBar" class="bg-gradient-to-r from-blue-400 to-blue-600 h-full rounded-full transition-all duration-500" style="width: 62%"></div>
+                            </div>
+                            <div class="text-xs opacity-80">
+                                <span id="workerContribution">850 points</span> / <span id="nextRankPoints">1,000 points</span>
+                            </div>
+                        </div>
+                        <div class="text-sm opacity-90">
+                            Status: <span id="workerStatus" class="font-semibold text-green-800">Contributing Well! 💪</span>
+                        </div>
+                    </div>
+
+                    <!-- VS Divider -->
+                    <div class="text-center flex flex-col justify-center">
+                        <div class="text-6xl font-bold opacity-50 mb-4">🤝</div>
+                        <div class="text-lg font-semibold">Working Together</div>
+                        <div class="md:hidden w-full h-px bg-white/30 my-4"></div>
+                    </div>
+
+                    <!-- Hive Health -->
+                    <div class="text-center space-y-4">
+                        <div class="relative">
+                            <div id="hiveIcon" class="text-8xl mx-auto transition-all duration-500 animate-hover-float">
+                                🏠
+                            </div>
+                            <div id="hiveHealthLevel" class="absolute -top-2 -right-2 bg-hive-gold text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg">
+                                85
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold">Hive Health</h3>
+                        <div id="hiveHealthTitle" class="text-sm font-semibold text-amber-800 mb-2">Thriving Hive</div>
+                        <div class="bg-white/30 rounded-lg p-4">
+                            <div class="text-sm opacity-90 mb-2">Health: 85%</div>
+                            <div class="bg-white/50 rounded-full h-6 overflow-hidden mb-2">
+                                <div id="hiveHealthBar" class="bg-gradient-to-r from-amber-400 to-amber-600 h-full rounded-full transition-all duration-500" style="width: 85%"></div>
+                            </div>
+                            <div class="text-xs opacity-80">
+                                All workers contributing together
+                            </div>
+                        </div>
+                        <div class="text-sm opacity-90">
+                            Status: <span id="hiveHealthStatus" class="font-semibold text-green-800">Excellent teamwork! 🍯</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Worker Board View -->
+                <div id="workerBoardView" class="hidden">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-bee-black mb-2">🏆 Worker Board - Ranked by Contribution</h3>
+                        <p class="text-bee-black/80">Individual contributions strengthen our hive - everyone rises together!</p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <!-- Top Workers -->
+                        <div class="bg-white/30 rounded-lg p-4">
+                            <div class="text-center">
+                                <div class="text-6xl mb-2">🥇</div>
+                                <div class="text-lg font-bold text-yellow-800">Alex Johnson</div>
+                                <div class="text-sm opacity-80">Senior Worker • 1,420 pts</div>
+                                <div class="text-xs text-yellow-800 mt-1">Top Contributor</div>
+                                <div class="mt-3 bg-green-500 text-white px-4 py-2 rounded text-sm">
+                                    🐝 Can rank up!
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white/30 rounded-lg p-4">
+                            <div class="text-center">
+                                <div class="text-6xl mb-2">🥈</div>
+                                <div class="text-lg font-bold text-gray-700">Demo Worker</div>
+                                <div class="text-sm opacity-80">Busy Bee • 850 pts</div>
+                                <div class="text-xs text-blue-800 mt-1">Steady Contributor</div>
+                                <div class="mt-3 bg-blue-500 text-white px-4 py-2 rounded text-sm">
+                                    👑 You
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white/30 rounded-lg p-4">
+                            <div class="text-center">
+                                <div class="text-6xl mb-2">🥉</div>
+                                <div class="text-lg font-bold text-orange-700">Emma Davis</div>
+                                <div class="text-sm opacity-80">Active Bee • 720 pts</div>
+                                <div class="text-xs text-blue-800 mt-1">Reliable Worker</div>
+                                <div class="mt-3 bg-amber-500 text-white px-4 py-2 rounded text-sm">
+                                    📈 Rising
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                </div>
+
+                <!-- Hive Prediction -->
+                <div class="mt-8 text-center">
+                    <div class="inline-block bg-white/30 rounded-lg px-6 py-3">
+                        <div class="text-sm opacity-90 mb-1">Current Hive Status</div>
+                        <div id="hivePrediction" class="text-xl font-bold text-green-800">Thriving! All workers contributing! 🍯</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Center -->
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Hive Tasks (Assignments) -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-bee-yellow">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    🍯 Hive Building Tasks
+                    <span class="ml-2 text-sm bg-bee-yellow text-bee-black px-2 py-1 rounded-full">Individual Work!</span>
+                </h3>
+                
+                <div class="space-y-3 mb-4">
+                    <div id="hiveTask1" class="task-item bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-lg p-4 border-l-4 border-yellow-400">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <div class="font-bold text-yellow-700 dark:text-yellow-400">Algebra Assignment</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Ms. Johnson • Due Friday</div>
+                                <div class="text-sm text-gray-700 dark:text-gray-300 mt-2">Quadratic equations, graphing, word problems</div>
+                                <div class="flex items-center mt-2 space-x-2">
+                                    <span class="text-xs bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300 px-2 py-1 rounded">Math</span>
+                                    <span class="text-xs text-gray-500">🍯 +100 hive points</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="startHiveTask('hiveTask1', 'Algebra Assignment', 'algebra')" class="w-full mt-4 bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition-colors font-medium flex items-center justify-center space-x-2">
+                            <span>🐝</span>
+                            <span>Start My Work</span>
+                        </button>
+                    </div>
+
+                    <div id="hiveTask2" class="task-item bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4 border-l-4 border-blue-400">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <div class="font-bold text-blue-700 dark:text-blue-400">Chemistry Lab Report</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Mr. Davis • Due Monday</div>
+                                <div class="text-sm text-gray-700 dark:text-gray-300 mt-2">Periodic table, chemical bonds, reactions</div>
+                                <div class="flex items-center mt-2 space-x-2">
+                                    <span class="text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-2 py-1 rounded">Science</span>
+                                    <span class="text-xs text-gray-500">🍯 +120 hive points</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="startHiveTask('hiveTask2', 'Chemistry Lab Report', 'chemistry')" class="w-full mt-4 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors font-medium flex items-center justify-center space-x-2">
+                            <span>🐝</span>
+                            <span>Start My Work</span>
+                        </button>
+                    </div>
+
+                    <div id="hiveTask3" class="task-item bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-4 border-l-4 border-green-400">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <div class="font-bold text-green-700 dark:text-green-400">History Research Project</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Mrs. Rodriguez • Due in 2 weeks</div>
+                                <div class="text-sm text-gray-700 dark:text-gray-300 mt-2">World War II, causes and consequences</div>
+                                <div class="flex items-center mt-2 space-x-2">
+                                    <span class="text-xs bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 px-2 py-1 rounded">History</span>
+                                    <span class="text-xs text-gray-500">🍯 +90 hive points</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="startHiveTask('hiveTask3', 'History Research Project', 'history')" class="w-full mt-4 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center justify-center space-x-2">
+                            <span>🐝</span>
+                            <span>Start My Work</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Hive Maintenance -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-bee-yellow">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    🔧 Quick Hive Maintenance
+                    <span class="ml-2 text-sm bg-worker-blue text-white px-2 py-1 rounded-full">Daily Tasks</span>
+                </h3>
+                
+                <div class="space-y-3 mb-4">
+                    <div class="task-item bg-gray-50 dark:bg-gray-700 rounded-lg p-3 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer" onclick="startMaintenanceTask('math')">
+                        <div>
+                            <div class="font-medium">Math Practice</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Complete 3 problems</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-primary font-semibold">+50 Hive Points</div>
+                            <div class="text-xs text-gray-500">⏱️ 5min</div>
+                        </div>
+                    </div>
+
+                    <div class="task-item bg-gray-50 dark:bg-gray-700 rounded-lg p-3 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer" onclick="startMaintenanceTask('science')">
+                        <div>
+                            <div class="font-medium">Science Quiz</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Quick science questions</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-primary font-semibold">+60 Hive Points</div>
+                            <div class="text-xs text-gray-500">⏱️ 5min</div>
+                        </div>
+                    </div>
+
+                    <div class="task-item bg-gray-50 dark:bg-gray-700 rounded-lg p-3 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer" onclick="startMaintenanceTask('reading')">
+                        <div>
+                            <div class="font-medium">Reading Exercise</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Reading comprehension</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-primary font-semibold">+40 Hive Points</div>
+                            <div class="text-xs text-gray-500">⏱️ 3min</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hive Intelligence & Support -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-bee-yellow">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    🧠 Hive Intelligence & Support
+                    <span class="ml-2 text-sm bg-green-500 text-white px-2 py-1 rounded-full">AI Helper</span>
+                </h3>
+                
+                <!-- Performance Insights -->
+                <div class="mb-6">
+                    <h4 class="font-semibold mb-3 text-green-600 dark:text-green-400">📈 Your Patterns</h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-start space-x-2">
+                            <span class="text-green-500 mt-1">✓</span>
+                            <span class="text-gray-700 dark:text-gray-300">You're most productive during morning sessions (85% contribution)</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-yellow-500 mt-1">⚠</span>
+                            <span class="text-gray-700 dark:text-gray-300">Math tasks need focus - affecting hive efficiency (60% completion)</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-blue-500 mt-1">!</span>
+                            <span class="text-gray-700 dark:text-gray-300">Your teamwork in chemistry helps boost overall hive health</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Suggestions -->
+                <div class="mb-6">
+                    <h4 class="font-semibold mb-3 text-blue-600 dark:text-blue-400">🎯 Hive Optimization</h4>
+                    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 text-sm">
+                        <div class="font-medium text-blue-700 dark:text-blue-300 mb-2">Ways to strengthen our hive:</div>
+                        <ul class="space-y-1 text-blue-600 dark:text-blue-400">
+                            <li>• Practice quadratic equations for 15 minutes daily</li>
+                            <li>• Help teammates with periodic table review</li>
+                            <li>• Share study techniques in worker chat</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- AI Mentor Bee -->
+                <div class="mb-6">
+                    <button onclick="openMentorBeeChat()" id="mentorBeeButton" class="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white p-4 rounded-lg hover:from-purple-600 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                        <div class="flex items-center justify-center space-x-3">
+                            <span class="text-2xl animate-buzz">🐝</span>
+                            <div class="text-left">
+                                <div class="font-bold">Chat with Mentor Bee</div>
+                                <div class="text-sm opacity-90">Get instant help & guidance!</div>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Progress Stats -->
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600 dark:text-gray-400 text-sm">Tasks Completed Today</span>
+                        <span id="tasksToday" class="font-bold text-worker-blue">3</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600 dark:text-gray-400 text-sm">Hive Contribution Streak</span>
+                        <span id="currentStreak" class="font-bold text-green-500">5 days 🔥</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600 dark:text-gray-400 text-sm">Rank Advancement</span>
+                        <span id="rankProgress" class="font-bold text-yellow-500">150 pts to Senior Bee 📈</span>
+                    </div>
+                </div>
+
+                <!-- Weekly Hive Contribution Chart -->
+                <div class="mt-4">
+                    <h4 class="font-medium mb-3 text-sm">This Week's Hive Contribution</h4>
+                    <div class="grid grid-cols-7 gap-1">
+                        <div class="text-center">
+                            <div class="text-xs text-gray-500 mb-1">M</div>
+                            <div class="h-6 bg-gray-200 dark:bg-gray-600 rounded-sm relative">
+                                <div class="absolute bottom-0 bg-primary rounded-sm" style="height: 80%; width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xs text-gray-500 mb-1">T</div>
+                            <div class="h-6 bg-gray-200 dark:bg-gray-600 rounded-sm relative">
+                                <div class="absolute bottom-0 bg-primary rounded-sm" style="height: 60%; width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xs text-gray-500 mb-1">W</div>
+                            <div class="h-6 bg-gray-200 dark:bg-gray-600 rounded-sm relative">
+                                <div class="absolute bottom-0 bg-primary rounded-sm" style="height: 100%; width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xs text-gray-500 mb-1">T</div>
+                            <div class="h-6 bg-gray-200 dark:bg-gray-600 rounded-sm relative">
+                                <div class="absolute bottom-0 bg-primary rounded-sm" style="height: 40%; width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xs text-gray-500 mb-1">F</div>
+                            <div class="h-6 bg-gray-200 dark:bg-gray-600 rounded-sm relative">
+                                <div class="absolute bottom-0 bg-primary rounded-sm" style="height: 90%; width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xs text-gray-500 mb-1">S</div>
+                            <div class="h-6 bg-gray-200 dark:bg-gray-600 rounded-sm"></div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xs text-gray-500 mb-1">S</div>
+                            <div class="h-6 bg-gray-200 dark:bg-gray-600 rounded-sm"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hive Updates & Messages -->
+        <div class="bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-xl p-6 border-2 border-bee-yellow">
+            <h3 class="text-lg font-bold mb-3 text-amber-700 dark:text-amber-400">🍯 Queen Bee Updates:</h3>
+            <div id="queenMessage" class="text-amber-600 dark:text-amber-300 italic">
+                "Excellent work, worker bees! Our hive's efficiency is at 85% thanks to your collaboration. Keep supporting each other and our collective success will flourish! 🐝💪"
+            </div>
+            <div class="mt-3 text-sm text-amber-500 dark:text-amber-400">
+                <span id="messageTime">2 minutes ago</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Universal Footer - Stays consistent across all pages/modes -->
+    <footer class="bg-gray-100 dark:bg-gray-800 border-t-4 border-bee-yellow py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/be94ad793df5c5fef6abb3606c29b6e8f15daaa53635ceb2e12adf1f3817c520?w=1080&h=1080" alt="Cortexo Logo" class="w-12 h-12 rounded-lg">
+                    <div>
+                        <div class="text-lg font-bold text-gray-800 dark:text-gray-200">Cortexo</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">Where Education Meets Adventure</div>
+                    </div>
+                </div>
+                
+                <div class="text-center md:text-right">
+                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                        © 2025 Cortexo. All rights reserved.
+                    </div>
+                    <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                        Transforming learning into epic adventures
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- All previous modals will be updated with bee theme throughout the JavaScript... -->
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // App state - updated for bee theme
+        let appState = {
+            isSignedUp: false,
+            isDemoMode: false,
+            username: '',
+            email: '',
+            userRole: '', // 'worker' or 'queen'
+            userDetails: {},
+            workerRank: 3,
+            hiveContribution: 850
+        };
+
+        // Hive state - collaborative instead of competitive
+        let hiveState = {
+            workerContribution: 850,
+            workerRank: 3,
+            hiveHealth: 85,
+            tasksCompletedToday: 3,
+            currentStreak: 5,
+            rankProgress: 150, // points to next rank
+            totalHiveEfficiency: 85,
+            mentorBeeEnabled: true // AI Mentor state - controlled by Queen
+        };
+
+        // Worker rank system
+        const workerRankSystem = {
+            ranks: [
+                { name: "New Bee", minPoints: 0, maxPoints: 199 },
+                { name: "Worker Bee", minPoints: 200, maxPoints: 499 },
+                { name: "Busy Bee", minPoints: 500, maxPoints: 999 },
+                { name: "Senior Bee", minPoints: 1000, maxPoints: 1999 },
+                { name: "Lead Bee", minPoints: 2000, maxPoints: 3999 },
+                { name: "Master Bee", minPoints: 4000, maxPoints: 7999 },
+                { name: "Elite Bee", minPoints: 8000, maxPoints: 15999 },
+                { name: "Royal Worker", minPoints: 16000, maxPoints: 31999 },
+                { name: "Hive Guardian", minPoints: 32000, maxPoints: 63999 },
+                { name: "Queen's Right Hand", minPoints: 64000, maxPoints: 999999 }
+            ]
+        };
+
+        // Get worker rank from points
+        function getWorkerRank(points) {
+            for (let i = workerRankSystem.ranks.length - 1; i >= 0; i--) {
+                const rank = workerRankSystem.ranks[i];
+                if (points >= rank.minPoints) {
+                    return { rank: i, name: rank.name, ...rank };
+                }
+            }
+            return { rank: 0, name: "New Bee", minPoints: 0, maxPoints: 199 };
+        }
+
+        // Sign up tab switching for bee theme
+        function switchSignUpTab(role) {
+            if (role === 'worker') {
+                document.getElementById('workerSignUpTab').className = 'flex-1 px-4 py-3 font-medium border-b-2 border-primary text-primary';
+                document.getElementById('queenSignUpTab').className = 'flex-1 px-4 py-3 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300';
+                document.getElementById('workerSignUpForm').classList.remove('hidden');
+                document.getElementById('queenSignUpForm').classList.add('hidden');
+            } else {
+                document.getElementById('queenSignUpTab').className = 'flex-1 px-4 py-3 font-medium border-b-2 border-queen-purple text-queen-purple';
+                document.getElementById('workerSignUpTab').className = 'flex-1 px-4 py-3 font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300';
+                document.getElementById('queenSignUpForm').classList.remove('hidden');
+                document.getElementById('workerSignUpForm').classList.add('hidden');
+            }
+        }
+
+        // Worker bee sign up
+        function signUpWorker() {
+            const username = document.getElementById('workerUsername').value.trim();
+            const email = document.getElementById('workerEmail').value.trim();
+            const password = document.getElementById('workerPassword').value.trim();
+            const confirmPassword = document.getElementById('workerConfirmPassword').value.trim();
+            const grade = document.getElementById('workerGrade').value;
+
+            if (!username || !email || !password || !confirmPassword || !grade) {
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                return;
+            }
+
+            if (password.length < 8) {
+                return;
+            }
+            
+            // Check for secure password requirements
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumbers = /\d/.test(password);
+            
+            if (!hasUppercase || !hasLowercase || !hasNumbers) {
+                return;
+            }
+
+            // Set user as worker
+            appState.isSignedUp = true;
+            appState.isDemoMode = false;
+            appState.userRole = 'worker';
+            appState.username = username;
+            appState.email = email;
+            appState.userDetails = { grade: grade };
+
+            // Hide welcome screen and show worker interface
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('userWelcome').classList.remove('hidden');
+            document.getElementById('displayUsername').textContent = username;
+
+
+        }
+
+        // Queen bee sign up
+        function signUpQueen() {
+            const username = document.getElementById('queenUsername').value.trim();
+            const email = document.getElementById('queenEmail').value.trim();
+            const password = document.getElementById('queenPassword').value.trim();
+            const confirmPassword = document.getElementById('queenConfirmPassword').value.trim();
+            const subject = document.getElementById('queenSubject').value;
+            const school = document.getElementById('schoolName').value.trim();
+
+            if (!username || !email || !password || !confirmPassword || !subject || !school) {
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                return;
+            }
+
+            if (password.length < 8) {
+                return;
+            }
+            
+            // Check for secure password requirements
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumbers = /\d/.test(password);
+            
+            if (!hasUppercase || !hasLowercase || !hasNumbers) {
+                return;
+            }
+
+            // Set user as queen and go to queen dashboard
+            appState.isSignedUp = true;
+            appState.isDemoMode = false;
+            appState.userRole = 'queen';
+            appState.username = username;
+            appState.email = email;
+            appState.userDetails = { subject: subject, school: school };
+
+            // Hide welcome screen and show queen dashboard
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            showQueenDashboard();
+            
+
+        }
+
+        // Worker demo mode
+        function enterWorkerDemo() {
+            appState.isDemoMode = true;
+            appState.isSignedUp = false;
+            appState.userRole = 'worker';
+            appState.username = 'Demo Worker';
+
+            // Hide welcome screen and show worker interface with demo banner
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('demoBanner').classList.remove('hidden');
+            document.getElementById('userWelcome').classList.remove('hidden');
+            document.getElementById('displayUsername').textContent = 'Demo Worker';
+            
+            // Show navigation buttons for demo users
+            document.getElementById('backToJoinBtn').classList.remove('hidden');
+            document.getElementById('queenModeBtn').classList.remove('hidden');
+            document.getElementById('queenModeBtn').textContent = '👑 Queen Mode';
+            
+            // Show simple back button for demo users too
+            document.getElementById('backButton').classList.remove('hidden');
+
+            // CRITICAL: Make sure we show ONLY student content in worker demo
+            showAllStudentContent();
+        }
+
+        // Queen demo mode
+        function enterQueenDemo() {
+            appState.isDemoMode = true;
+            appState.isSignedUp = false;
+            appState.userRole = 'queen';
+            appState.username = 'Demo Queen';
+
+            // Hide welcome screen first
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('demoBanner').classList.remove('hidden');
+            document.getElementById('userWelcome').classList.remove('hidden');
+            document.getElementById('displayUsername').textContent = 'Demo Queen';
+            
+            // Show navigation buttons for demo users
+            document.getElementById('backToJoinBtn').classList.remove('hidden');
+            document.getElementById('queenModeBtn').classList.remove('hidden');
+            document.getElementById('queenModeBtn').textContent = '🐝 Worker Mode';
+            
+            // Show simple back button for demo users too
+            document.getElementById('backButton').classList.remove('hidden');
+            
+            // CRITICAL: Hide all student content before showing queen dashboard
+            hideAllStudentContent();
+            
+            // Show queen dashboard content
+            showQueenDashboard();
+
+
+        }
+
+        // Switch between hive modes
+        function switchHiveMode(mode) {
+            if (mode === 'tasks') {
+                document.getElementById('tasksHiveBtn').className = 'px-4 py-2 rounded-md bg-white/40 text-bee-black font-medium transition-all';
+                document.getElementById('workersHiveBtn').className = 'px-4 py-2 rounded-md text-bee-black/70 hover:bg-white/20 font-medium transition-all';
+                document.getElementById('hiveTasksView').classList.remove('hidden');
+                document.getElementById('workerBoardView').classList.add('hidden');
+            } else {
+                document.getElementById('workersHiveBtn').className = 'px-4 py-2 rounded-md bg-white/40 text-bee-black font-medium transition-all';
+                document.getElementById('tasksHiveBtn').className = 'px-4 py-2 rounded-md text-bee-black/70 hover:bg-white/20 font-medium transition-all';
+                document.getElementById('workerBoardView').classList.remove('hidden');
+                document.getElementById('hiveTasksView').classList.add('hidden');
+            }
+        }
+
+        // Custom alert function for bee theme
+        function showCustomAlert(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'fixed top-4 right-4 bg-primary text-bee-black px-6 py-4 rounded-lg shadow-lg z-50 max-w-sm animate-slide-up border-2 border-bee-yellow';
+            alertDiv.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="text-2xl animate-buzz">🐝</div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium">${message}</p>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-bee-black/70 hover:text-bee-black">✕</button>
+                </div>
+            `;
+            document.body.appendChild(alertDiv);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentElement) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Password strength checking (same function names but updated for bee roles)
+        function checkPasswordStrength(userType) {
+            const password = document.getElementById(`${userType}Password`).value;
+            const req1 = document.getElementById(`${userType}Req1`);
+            const req2 = document.getElementById(`${userType}Req2`);
+            const req3 = document.getElementById(`${userType}Req3`);
+            const req4 = document.getElementById(`${userType}Req4`);
+
+            // Check length (8+ characters)
+            if (password.length >= 8) {
+                req1.innerHTML = '<span class="mr-1 text-green-500">✓</span> 8+ characters';
+                req1.className = 'flex items-center text-green-600 dark:text-green-400';
+            } else {
+                req1.innerHTML = '<span class="mr-1">○</span> 8+ characters';
+                req1.className = 'flex items-center text-gray-500';
+            }
+
+            // Check uppercase
+            if (/[A-Z]/.test(password)) {
+                req2.innerHTML = '<span class="mr-1 text-green-500">✓</span> Uppercase letter';
+                req2.className = 'flex items-center text-green-600 dark:text-green-400';
+            } else {
+                req2.innerHTML = '<span class="mr-1">○</span> Uppercase letter';
+                req2.className = 'flex items-center text-gray-500';
+            }
+
+            // Check lowercase
+            if (/[a-z]/.test(password)) {
+                req3.innerHTML = '<span class="mr-1 text-green-500">✓</span> Lowercase letter';
+                req3.className = 'flex items-center text-green-600 dark:text-green-400';
+            } else {
+                req3.innerHTML = '<span class="mr-1">○</span> Lowercase letter';
+                req3.className = 'flex items-center text-gray-500';
+            }
+
+            // Check number
+            if (/\d/.test(password)) {
+                req4.innerHTML = '<span class="mr-1 text-green-500">✓</span> Number';
+                req4.className = 'flex items-center text-green-600 dark:text-green-400';
+            } else {
+                req4.innerHTML = '<span class="mr-1">○</span> Number';
+                req4.className = 'flex items-center text-gray-500';
+            }
+
+            // Also check password match if confirm field has content
+            const confirmPassword = document.getElementById(`${userType}ConfirmPassword`).value;
+            if (confirmPassword) {
+                checkPasswordMatch(userType);
+            }
+        }
+
+        function checkPasswordMatch(userType) {
+            const password = document.getElementById(`${userType}Password`).value;
+            const confirmPassword = document.getElementById(`${userType}ConfirmPassword`).value;
+            const matchDiv = document.getElementById(`${userType}PasswordMatch`);
+
+            if (confirmPassword === '') {
+                matchDiv.classList.add('hidden');
+                return;
+            }
+
+            matchDiv.classList.remove('hidden');
+
+            if (password === confirmPassword) {
+                matchDiv.innerHTML = '<span class="text-green-600 dark:text-green-400">✓ Passwords match</span>';
+            } else {
+                matchDiv.innerHTML = '<span class="text-red-600 dark:text-red-400">✗ Passwords do not match</span>';
+            }
+        }
+
+        // Initialize demo with bee theme
+        function showWelcomeScreen() {
+            console.log('🏠 Returning to Welcome Screen...');
+            
+            document.getElementById('welcomeScreen').classList.remove('hidden');
+            document.getElementById('demoBanner').classList.add('hidden');
+            document.getElementById('userWelcome').classList.add('hidden');
+            document.getElementById('backToJoinBtn').classList.add('hidden');
+            document.getElementById('backButton').classList.add('hidden');
+            
+            // Remove queen dashboard if it exists
+            const queenDashboard = document.getElementById('queenDashboard');
+            if (queenDashboard) {
+                console.log('📋 Removing Queen Dashboard');
+                queenDashboard.remove();
+            }
+            
+            // Show student content
+            showAllStudentContent();
+            
+            // Reset app state
+            appState.isSignedUp = false;
+            appState.isDemoMode = false;
+            appState.userRole = '';
+            
+            console.log('🏠 Welcome screen setup complete');
+        }
+
+        // Simple back navigation function
+        function goBack() {
+            showWelcomeScreen();
+        }
+
+        // Show back button for authenticated users (not demo users)
+        function showBackButton() {
+            if (appState.isSignedUp && !appState.isDemoMode) {
+                document.getElementById('backButton').classList.remove('hidden');
+            }
+        }
+
+        // Hive Building Tasks functionality
+        function startHiveTask(taskId, taskName, subject) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                    <!-- Modal Header -->
+                    <div class="bg-gradient-to-r from-yellow-500 to-amber-600 text-white p-6 rounded-t-2xl">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-3xl">🍯</span>
+                                <div>
+                                    <h2 class="text-2xl font-bold">${taskName}</h2>
+                                    <p class="text-yellow-100">Complete your individual work to strengthen the hive</p>
+                                </div>
+                            </div>
+                            <button onclick="this.closest('.fixed').remove()" class="text-white hover:text-yellow-200 transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Modal Content -->
+                    <div class="p-6">
+                        <div class="space-y-6">
+                            <!-- Task Details -->
+                            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-3">📋 Assignment Details</h3>
+                                ${getTaskDetails(subject)}
+                            </div>
+
+
+
+                            <!-- Progress Tracker -->
+                            <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
+                                <h3 class="font-semibold text-green-800 dark:text-green-300 mb-3">📈 Your Progress</h3>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm">Personal Progress</span>
+                                        <span class="text-sm font-semibold">0%</span>
+                                    </div>
+                                    <div class="bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                        <div class="bg-green-500 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400">Click "Start Working" to begin</div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex space-x-3">
+                                <button onclick="startWorking('${taskId}'); this.closest('.fixed').remove();" class="flex-1 bg-yellow-500 text-white py-3 rounded-lg hover:bg-yellow-600 transition-colors font-medium">
+                                    🐝 Start My Work
+                                </button>
+                                <button onclick="this.closest('.fixed').remove()" class="px-6 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                                    Later
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function getTaskDetails(subject) {
+            const details = {
+                'algebra': `
+                    <div class="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                        <p><strong>Topic:</strong> Quadratic Equations & Graphing</p>
+                        <p><strong>Due:</strong> Friday at 11:59 PM</p>
+                        <p><strong>Estimated Time:</strong> 45-60 minutes</p>
+                        <p><strong>Requirements:</strong></p>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li>Solve 8 quadratic equations using different methods</li>
+                            <li>Graph 3 parabolas and identify key features</li>
+                            <li>Complete 2 real-world word problems</li>
+                            <li>Show all work and explain your reasoning</li>
+                        </ul>
+                    </div>
+                `,
+                'chemistry': `
+                    <div class="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                        <p><strong>Topic:</strong> Chemical Bonds & Periodic Table</p>
+                        <p><strong>Due:</strong> Monday at 11:59 PM</p>
+                        <p><strong>Estimated Time:</strong> 60-75 minutes</p>
+                        <p><strong>Requirements:</strong></p>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li>Complete periodic table analysis worksheet</li>
+                            <li>Identify types of chemical bonds in 10 compounds</li>
+                            <li>Draw Lewis structures for 5 molecules</li>
+                            <li>Write lab report on bond strength experiment</li>
+                        </ul>
+                    </div>
+                `,
+                'history': `
+                    <div class="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                        <p><strong>Topic:</strong> World War II Causes & Consequences</p>
+                        <p><strong>Due:</strong> In 2 weeks (flexible deadline)</p>
+                        <p><strong>Estimated Time:</strong> 2-3 hours over multiple days</p>
+                        <p><strong>Requirements:</strong></p>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li>Research 3 major causes of WWII</li>
+                            <li>Analyze primary source documents</li>
+                            <li>Create timeline of key events</li>
+                            <li>Write 500-word essay on long-term consequences</li>
+                        </ul>
+                    </div>
+                `
+            };
+            return details[subject] || `<p class="text-sm text-gray-700 dark:text-gray-300">Task details will be loaded...</p>`;
+        }
+
+        // Quick Maintenance Tasks functionality
+        function startMaintenanceTask(type) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+                    <!-- Modal Header -->
+                    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-t-2xl">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-3xl">🔧</span>
+                                <div>
+                                    <h2 class="text-2xl font-bold">${getMaintenanceTitle(type)}</h2>
+                                    <p class="text-blue-100">Quick 5-minute hive maintenance</p>
+                                </div>
+                            </div>
+                            <button onclick="this.closest('.fixed').remove()" class="text-white hover:text-blue-200 transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Modal Content -->
+                    <div class="p-6">
+                        <div class="space-y-6">
+                            <!-- Task Preview -->
+                            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                                <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-3">⚡ Quick Practice</h3>
+                                ${getMaintenancePreview(type)}
+                            </div>
+
+                            <!-- Rewards -->
+                            <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4">
+                                <h3 class="font-semibold text-yellow-800 dark:text-yellow-300 mb-3">🍯 Rewards</h3>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm">Hive Points:</span>
+                                    <span class="font-bold text-yellow-600">+${getMaintenancePoints(type)} points</span>
+                                </div>
+                                <div class="flex items-center justify-between mt-2">
+                                    <span class="text-sm">Daily Streak Bonus:</span>
+                                    <span class="font-bold text-green-600">+10 points</span>
+                                </div>
+                            </div>
+
+                            <!-- Timer -->
+                            <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                                <h3 class="font-semibold text-blue-800 dark:text-blue-300 mb-3">⏱️ Time Challenge</h3>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-blue-600" id="maintenanceTimer">5:00</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400">Complete within time for bonus points!</div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex space-x-3">
+                                <button onclick="startMaintenanceWork('${type}'); this.closest('.fixed').remove();" class="flex-1 bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors font-medium">
+                                    🚀 Start Practice
+                                </button>
+                                <button onclick="this.closest('.fixed').remove()" class="px-6 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                                    Skip
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function getMaintenanceTitle(type) {
+            const titles = {
+                'math': 'Math Practice',
+                'science': 'Science Quiz',
+                'reading': 'Reading Exercise'
+            };
+            return titles[type] || 'Quick Practice';
+        }
+
+        function getMaintenancePreview(type) {
+            const previews = {
+                'math': `
+                    <div class="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                        <p><strong>Today's Focus:</strong> Mental Math & Basic Operations</p>
+                        <p><strong>Format:</strong> 3 quick problems</p>
+                        <div class="bg-white dark:bg-gray-600 rounded p-2 mt-2">
+                            <p class="text-xs font-mono">Example: Solve 15 × 24 = ?</p>
+                        </div>
+                    </div>
+                `,
+                'science': `
+                    <div class="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                        <p><strong>Today's Focus:</strong> Basic Chemistry Facts</p>
+                        <p><strong>Format:</strong> 5 multiple choice questions</p>
+                        <div class="bg-white dark:bg-gray-600 rounded p-2 mt-2">
+                            <p class="text-xs">Example: What is the chemical symbol for water?</p>
+                        </div>
+                    </div>
+                `,
+                'reading': `
+                    <div class="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                        <p><strong>Today's Focus:</strong> Reading Comprehension</p>
+                        <p><strong>Format:</strong> Short passage + 2 questions</p>
+                        <div class="bg-white dark:bg-gray-600 rounded p-2 mt-2">
+                            <p class="text-xs">Quick paragraph about current events</p>
+                        </div>
+                    </div>
+                `
+            };
+            return previews[type] || '<p class="text-sm">Practice questions loading...</p>';
+        }
+
+        function getMaintenancePoints(type) {
+            const points = {
+                'math': '50',
+                'science': '60',
+                'reading': '40'
+            };
+            return points[type] || '50';
+        }
+
+        // Supporting functions for task interactions
+        function startWorking(taskId) {
+            // In a real app, this would navigate to the actual task interface
+        }
+
+        function startMaintenanceWork(type) {
+            // In a real app, this would start the actual practice session
+        }
+
+        function joinStudyGroup(taskId) {
+            // Join study group functionality
+        }
+
+        function findPartner(taskId) {
+            // Find study partner functionality
+        }
+
+        function shareResources(taskId) {
+            // Share resources functionality
+        }
+
+        function askForHelp(taskId) {
+            // Ask for help functionality
+        }
+
+        function openBeeCustomization() {
+            // Bee customization functionality
+        }
+
+        function openMentorBeeChat() {
+            // Check if AI Mentor is enabled
+            if (!hiveState.mentorBeeEnabled) {
+                showCustomAlert('🚫 Mentor Bee AI is currently disabled by your teacher. Please ask your teacher for help instead.');
+                return;
+            }
+
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+                    <!-- Modal Header -->
+                    <div class="bg-gradient-to-r from-purple-500 to-blue-500 text-white p-6 rounded-t-2xl flex-shrink-0">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-3xl animate-buzz">🐝</span>
+                                <div>
+                                    <h2 class="text-2xl font-bold">Mentor Bee AI Assistant</h2>
+                                    <p class="text-purple-100">Get instant help with your hive tasks!</p>
+                                </div>
+                            </div>
+                            <button onclick="this.closest('.fixed').remove()" class="text-white hover:text-purple-200 transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages -->
+                    <div id="mentorChatMessages" class="flex-1 p-6 overflow-y-auto bg-gray-50 dark:bg-gray-700 space-y-4">
+                        <!-- Welcome Message -->
+                        <div class="flex items-start space-x-3">
+                            <div class="text-2xl">🐝</div>
+                            <div class="bg-white dark:bg-gray-600 rounded-lg p-4 max-w-md">
+                                <p class="text-sm"><strong>Mentor Bee:</strong> Hello! I'm here to help you with your hive tasks. What do you need assistance with today?</p>
+                                <div class="mt-3 flex flex-wrap gap-2">
+                                    <button onclick="sendQuickQuestion('math')" class="text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-2 py-1 rounded hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors">
+                                        Math Help 📐
+                                    </button>
+                                    <button onclick="sendQuickQuestion('science')" class="text-xs bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 px-2 py-1 rounded hover:bg-green-200 dark:hover:bg-green-800 transition-colors">
+                                        Science Help 🧪
+                                    </button>
+                                    <button onclick="sendQuickQuestion('study-tips')" class="text-xs bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 px-2 py-1 rounded hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors">
+                                        Study Tips 📚
+                                    </button>
+                                    <button onclick="sendQuickQuestion('motivation')" class="text-xs bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300 px-2 py-1 rounded hover:bg-yellow-200 dark:hover:bg-yellow-800 transition-colors">
+                                        Motivation 💪
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="bg-white dark:bg-gray-800 p-4 border-t border-gray-200 dark:border-gray-600 flex-shrink-0">
+                        <div class="flex space-x-3">
+                            <input type="text" id="mentorChatInput" placeholder="Ask me anything about your studies..." class="flex-1 px-4 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" onkeypress="if(event.key==='Enter') sendMentorMessage()">
+                            <button onclick="sendMentorMessage()" class="bg-purple-500 text-white px-6 py-2 rounded-lg hover:bg-purple-600 transition-colors font-medium">
+                                Send 📨
+                            </button>
+                        </div>
+                        <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            💡 Try asking: "Help me with quadratic equations" or "I'm feeling overwhelmed with homework"
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function findStudyPartner() {
+            showCustomAlert(`🔍 Finding study partners based on your learning style and current subjects... You'll be matched with compatible worker bees for productive collaboration! 🤝`);
+        }
+
+        function toggleQueenMode() {
+            if (appState.userRole === 'queen') {
+                // Switch back to worker view
+                appState.userRole = 'worker';
+                hideQueenDashboard();
+                showAllStudentContent();
+                document.getElementById('queenModeBtn').textContent = '👑 Queen Mode';
+                showCustomAlert('🐝 Switched to Worker View! Contributing to hive success.');
+            } else {
+                // Switch to queen view
+                appState.userRole = 'queen';
+                showQueenDashboard();
+                document.getElementById('queenModeBtn').textContent = '🐝 Worker Mode';
+                showCustomAlert('👑 Switched to Queen View! Manage your hive and create tasks.');
+            }
+        }
+
+        function showQueenDashboard() {
+            // Hide student content first
+            hideAllStudentContent();
+            
+            // Remove any existing queen dashboard
+            const existingDashboard = document.getElementById('queenDashboard');
+            if (existingDashboard) {
+                existingDashboard.remove();
+            }
+            
+            // Create new queen dashboard as separate element
+            const queenDashboard = document.createElement('div');
+            queenDashboard.id = 'queenDashboard';
+            queenDashboard.className = 'max-w-6xl mx-auto px-4 py-6 space-y-8';
+            queenDashboard.innerHTML = `
+                <!-- Queen Bee Dashboard -->
+                <div class="space-y-8">
+                    <!-- Queen's Hive Overview -->
+                    <div class="bg-gradient-to-br from-purple-400 via-purple-500 to-purple-600 rounded-2xl p-8 text-white relative overflow-hidden">
+                        <div class="bg-white/20 rounded-xl p-6 backdrop-blur-sm">
+                            <h2 class="text-3xl font-bold text-center mb-6">👑 Queen's Hive Command Center</h2>
+                            
+                            <div class="grid md:grid-cols-4 gap-6">
+                                <!-- Total Worker Bees -->
+                                <div class="text-center">
+                                    <div class="text-4xl mb-2">🐝</div>
+                                    <div class="text-2xl font-bold">24</div>
+                                    <div class="text-sm opacity-90">Active Workers</div>
+                                </div>
+                                
+                                <!-- Hive Health -->
+                                <div class="text-center">
+                                    <div class="text-4xl mb-2">🍯</div>
+                                    <div class="text-2xl font-bold">85%</div>
+                                    <div class="text-sm opacity-90">Hive Health</div>
+                                </div>
+                                
+                                <!-- Tasks Assigned -->
+                                <div class="text-center">
+                                    <div class="text-4xl mb-2">📋</div>
+                                    <div class="text-2xl font-bold">12</div>
+                                    <div class="text-sm opacity-90">Active Tasks</div>
+                                </div>
+                                
+                                <!-- Collaboration Score -->
+                                <div class="text-center">
+                                    <div class="text-4xl mb-2">🤝</div>
+                                    <div class="text-2xl font-bold">92%</div>
+                                    <div class="text-sm opacity-90">Teamwork Score</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <!-- Create New Hive Task -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-purple-300">
+                            <h3 class="text-xl font-bold mb-4 text-purple-700 dark:text-purple-400">🍯 Create Hive Task</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Design collaborative assignments for your worker bees</p>
+                            <button onclick="openTaskCreator()" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors font-medium">
+                                + New Task Assignment
+                            </button>
+                        </div>
+
+                        <!-- Manage Worker Bees -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-blue-300">
+                            <h3 class="text-xl font-bold mb-4 text-blue-700 dark:text-blue-400">🐝 Manage Workers</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Monitor and support your student worker bees</p>
+                            <button onclick="openWorkerManager()" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                                View Worker Status
+                            </button>
+                        </div>
+
+                        <!-- Hive Analytics -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-amber-300">
+                            <h3 class="text-xl font-bold mb-4 text-amber-700 dark:text-amber-400">📊 Hive Analytics</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">Track collaboration and learning progress</p>
+                            <button onclick="openHiveAnalytics()" class="w-full bg-amber-600 text-white py-3 rounded-lg hover:bg-amber-700 transition-colors font-medium">
+                                View Analytics
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI Mentor Bee Controls -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-blue-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-blue-700 dark:text-blue-400">🐝 Mentor Bee AI System</h3>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-600 dark:text-gray-400">Status:</span>
+                                <span id="mentorBeeStatus" class="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">Active</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- AI Toggle Control -->
+                            <div class="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                <div class="flex-1">
+                                    <div class="font-medium text-blue-800 dark:text-blue-300">AI Tutoring Assistant</div>
+                                    <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Provides personalized help to worker bees</div>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="aiTutorToggle" class="sr-only peer" ${hiveState.mentorBeeEnabled ? 'checked' : ''} onchange="toggleMentorBeeAI()">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+
+                            <!-- AI Configuration Options -->
+                            <div id="aiConfigOptions" class="space-y-3">
+                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                                    <span class="text-sm font-medium">Response Speed</span>
+                                    <select id="aiResponseSpeed" class="text-sm border rounded px-2 py-1 bg-white dark:bg-gray-600 border-gray-300 dark:border-gray-500">
+                                        <option value="instant">Instant</option>
+                                        <option value="normal" selected>Normal</option>
+                                        <option value="thoughtful">Thoughtful</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                                    <span class="text-sm font-medium">Help Level</span>
+                                    <select id="aiHelpLevel" class="text-sm border rounded px-2 py-1 bg-white dark:bg-gray-600 border-gray-300 dark:border-gray-500">
+                                        <option value="hints">Hints Only</option>
+                                        <option value="guided" selected>Guided Support</option>
+                                        <option value="detailed">Detailed Help</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                                    <span class="text-sm font-medium">Learning Style</span>
+                                    <select id="aiLearningStyle" class="text-sm border rounded px-2 py-1 bg-white dark:bg-gray-600 border-gray-300 dark:border-gray-500">
+                                        <option value="adaptive" selected>Adaptive</option>
+                                        <option value="visual">Visual Learner</option>
+                                        <option value="auditory">Auditory Learner</option>
+                                        <option value="kinesthetic">Hands-on Learner</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- AI Usage Stats -->
+                            <div class="border-t pt-4 mt-4">
+                                <h4 class="font-medium mb-3 text-sm">📈 AI Usage Today</h4>
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-blue-600">47</div>
+                                        <div class="text-gray-600 dark:text-gray-400">Questions Answered</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-green-600">89%</div>
+                                        <div class="text-gray-600 dark:text-gray-400">Success Rate</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Hive Tasks -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-2xl font-bold">📋 Active Hive Tasks</h3>
+                            <button onclick="openTaskCreator()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                                + Create Task
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Task 1 -->
+                            <div class="border rounded-lg p-4 bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-yellow-800 dark:text-yellow-300">Algebra Assignment</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Due: Friday • Math • 24 workers assigned</p>
+                                        <div class="mt-2">
+                                            <div class="text-xs text-gray-500 mb-1">Completion Progress:</div>
+                                            <div class="bg-yellow-200 dark:bg-yellow-800 rounded-full h-2">
+                                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 68%"></div>
+                                            </div>
+                                            <div class="text-xs text-gray-500 mt-1">16 of 24 workers completed</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2 ml-4">
+                                        <button onclick="editTask('task1')" class="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">Edit</button>
+                                        <button onclick="viewTaskResults('task1')" class="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600">Results</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Task 2 -->
+                            <div class="border rounded-lg p-4 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-blue-800 dark:text-blue-300">Chemistry Pollen Analysis</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Due: Monday • Science • 24 workers assigned</p>
+                                        <div class="mt-2">
+                                            <div class="text-xs text-gray-500 mb-1">Completion Progress:</div>
+                                            <div class="bg-blue-200 dark:bg-blue-800 rounded-full h-2">
+                                                <div class="bg-blue-500 h-2 rounded-full" style="width: 42%"></div>
+                                            </div>
+                                            <div class="text-xs text-gray-500 mt-1">10 of 24 workers completed</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2 ml-4">
+                                        <button onclick="editTask('task2')" class="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">Edit</button>
+                                        <button onclick="viewTaskResults('task2')" class="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600">Results</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Task 3 -->
+                            <div class="border rounded-lg p-4 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <h4 class="font-bold text-green-800 dark:text-green-300">History Hive Documentation</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Due: Next Week • History • 24 workers assigned</p>
+                                        <div class="mt-2">
+                                            <div class="text-xs text-gray-500 mb-1">Completion Progress:</div>
+                                            <div class="bg-green-200 dark:bg-green-800 rounded-full h-2">
+                                                <div class="bg-green-500 h-2 rounded-full" style="width: 25%"></div>
+                                            </div>
+                                            <div class="text-xs text-gray-500 mt-1">6 of 24 workers completed</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2 ml-4">
+                                        <button onclick="editTask('task3')" class="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">Edit</button>
+                                        <button onclick="viewTaskResults('task3')" class="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600">Results</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Worker Bee Performance -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Top Performing Workers -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                            <h3 class="text-xl font-bold mb-4 text-green-600 dark:text-green-400">🏆 Top Contributing Workers</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="text-xl">🥇</span>
+                                        <div>
+                                            <div class="font-medium">Alex Johnson</div>
+                                            <div class="text-xs text-gray-500">Senior Worker • 1,420 pts</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-green-600 font-semibold">95%</div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="text-xl">🥈</span>
+                                        <div>
+                                            <div class="font-medium">Emma Davis</div>
+                                            <div class="text-xs text-gray-500">Busy Bee • 1,180 pts</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-blue-600 font-semibold">88%</div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="text-xl">🥉</span>
+                                        <div>
+                                            <div class="font-medium">Marcus Chen</div>
+                                            <div class="text-xs text-gray-500">Active Bee • 980 pts</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-amber-600 font-semibold">82%</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Workers Needing Support -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                            <h3 class="text-xl font-bold mb-4 text-red-600 dark:text-red-400">⚠️ Workers Needing Support</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="text-xl">🐝</span>
+                                        <div>
+                                            <div class="font-medium">Sarah Kim</div>
+                                            <div class="text-xs text-gray-500">New Bee • 245 pts</div>
+                                        </div>
+                                    </div>
+                                    <button onclick="supportWorker('sarah')" class="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600">
+                                        Help
+                                    </button>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="text-xl">🐝</span>
+                                        <div>
+                                            <div class="font-medium">James Wilson</div>
+                                            <div class="text-xs text-gray-500">Worker Bee • 420 pts</div>
+                                        </div>
+                                    </div>
+                                    <button onclick="supportWorker('james')" class="px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600">
+                                        Monitor
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hive Communication -->
+                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 border-2 border-purple-200 dark:border-purple-800">
+                        <h3 class="text-lg font-bold mb-3 text-purple-700 dark:text-purple-400">📢 Send Message to Hive</h3>
+                        <div class="flex space-x-4">
+                            <input type="text" id="queenMessageInput" placeholder="Motivate your worker bees..." class="flex-1 px-4 py-2 border border-purple-300 dark:border-purple-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <button onclick="sendQueenMessage()" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                                Send 📨
+                            </button>
+                        </div>
+                        <div class="mt-2 text-xs text-purple-600 dark:text-purple-400">
+                            💡 Tip: Positive reinforcement helps maintain high hive morale!
+                        </div>
+                    </div>
+
+                </div>
+            `;
+            
+            // Insert queen dashboard after the header
+            const header = document.querySelector('header');
+            header.insertAdjacentElement('afterend', queenDashboard);
+            
+
+        }
+
+        // Additional Queen Dashboard Functions
+        function openTaskCreator() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <!-- Modal Header -->
+                    <div class="bg-gradient-to-r from-purple-500 to-blue-600 text-white p-6 rounded-t-2xl">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-3xl">🍯</span>
+                                <div>
+                                    <h2 class="text-2xl font-bold">Create New Hive Task</h2>
+                                    <p class="text-purple-100">Design collaborative assignments for your worker bees</p>
+                                </div>
+                            </div>
+                            <button onclick="this.closest('.fixed').remove()" class="text-white hover:text-purple-200 transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Modal Content -->
+                    <div class="p-6">
+                        <!-- Task Creation Method Selection -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">📝 Choose Creation Method</h3>
+                            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <!-- PDF Upload -->
+                                <div class="task-method-card p-4 border-2 border-red-200 rounded-lg hover:border-red-400 cursor-pointer transition-all bg-red-50 dark:bg-red-900/20" onclick="selectTaskMethod('pdf')">
+                                    <div class="text-center">
+                                        <div class="text-3xl mb-2">📄</div>
+                                        <div class="font-semibold text-red-700 dark:text-red-400">Upload PDF</div>
+                                        <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Extract questions from documents</div>
+                                    </div>
+                                </div>
+
+                                <!-- Text to Questions -->
+                                <div class="task-method-card p-4 border-2 border-blue-200 rounded-lg hover:border-blue-400 cursor-pointer transition-all bg-blue-50 dark:bg-blue-900/20" onclick="selectTaskMethod('text')">
+                                    <div class="text-center">
+                                        <div class="text-3xl mb-2">📝</div>
+                                        <div class="font-semibold text-blue-700 dark:text-blue-400">Text to Questions</div>
+                                        <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Convert your content to tasks</div>
+                                    </div>
+                                </div>
+
+                                <!-- Generate Similar -->
+                                <div class="task-method-card p-4 border-2 border-green-200 rounded-lg hover:border-green-400 cursor-pointer transition-all bg-green-50 dark:bg-green-900/20" onclick="selectTaskMethod('similar')">
+                                    <div class="text-center">
+                                        <div class="text-3xl mb-2">🔄</div>
+                                        <div class="font-semibold text-green-700 dark:text-green-400">Generate Similar</div>
+                                        <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Based on previous tasks</div>
+                                    </div>
+                                </div>
+
+                                <!-- Manual Creation -->
+                                <div class="task-method-card p-4 border-2 border-purple-200 rounded-lg hover:border-purple-400 cursor-pointer transition-all bg-purple-50 dark:bg-purple-900/20" onclick="selectTaskMethod('manual')">
+                                    <div class="text-center">
+                                        <div class="text-3xl mb-2">✏️</div>
+                                        <div class="font-semibold text-purple-700 dark:text-purple-400">Manual Creation</div>
+                                        <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Create from scratch</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Content Area -->
+                        <div id="taskCreationContent">
+                            <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                                <div class="text-4xl mb-4">🐝</div>
+                                <p>Select a creation method above to get started</p>
+                            </div>
+                        </div>
+
+                        <!-- Task Details Form (shown after method selection) -->
+                        <div id="taskDetailsForm" class="hidden">
+                            <div class="border-t pt-6 mt-6">
+                                <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">🏷️ Task Details</h3>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Task Name</label>
+                                        <input type="text" id="taskName" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="e.g., Algebra Assignment">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject</label>
+                                        <select id="taskSubject" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                            <option value="math">Mathematics</option>
+                                            <option value="science">Science</option>
+                                            <option value="english">English/Language Arts</option>
+                                            <option value="history">History/Social Studies</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Due Date</label>
+                                        <input type="date" id="taskDueDate" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hive Points</label>
+                                        <input type="number" id="taskPoints" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="100" min="10" max="500">
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                                    <textarea id="taskDescription" rows="3" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Describe what worker bees need to accomplish..."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex justify-end space-x-3 mt-6 pt-6 border-t">
+                                <button onclick="this.closest('.fixed').remove()" class="px-6 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                                    Cancel
+                                </button>
+                                <button onclick="createHiveTask()" class="px-6 py-2 bg-purple-600 text-white hover:bg-purple-700 rounded-lg transition-colors font-medium">
+                                    🍯 Create Task
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function openWorkerManager() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                    <!-- Modal Header -->
+                    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-t-2xl">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-3xl">🐝</span>
+                                <div>
+                                    <h2 class="text-2xl font-bold">Worker Bee Management</h2>
+                                    <p class="text-blue-100">Monitor and support your student worker bees</p>
+                                </div>
+                            </div>
+                            <button onclick="this.closest('.fixed').remove()" class="text-white hover:text-blue-200 transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Modal Content -->
+                    <div class="p-6">
+                        <!-- Quick Stats -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 text-center">
+                                <div class="text-2xl font-bold text-green-600">18</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Thriving Workers</div>
+                            </div>
+                            <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 text-center">
+                                <div class="text-2xl font-bold text-yellow-600">4</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Need Support</div>
+                            </div>
+                            <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 text-center">
+                                <div class="text-2xl font-bold text-blue-600">2</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">New This Week</div>
+                            </div>
+                            <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 text-center">
+                                <div class="text-2xl font-bold text-purple-600">87%</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Avg. Engagement</div>
+                            </div>
+                        </div>
+
+                        <!-- Filter and Search -->
+                        <div class="flex flex-col md:flex-row gap-4 mb-6">
+                            <div class="flex-1">
+                                <input type="text" placeholder="Search workers by name..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            </div>
+                            <select class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option value="all">All Workers</option>
+                                <option value="struggling">Need Support</option>
+                                <option value="thriving">Top Performers</option>
+                                <option value="new">New Workers</option>
+                            </select>
+                            <select class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option value="all">All Subjects</option>
+                                <option value="math">Math</option>
+                                <option value="science">Science</option>
+                                <option value="history">History</option>
+                            </select>
+                        </div>
+
+                        <!-- Worker List -->
+                        <div class="space-y-4">
+                            ${generateWorkerList()}
+                        </div>
+
+                        <!-- Bulk Actions -->
+                        <div class="mt-6 pt-4 border-t">
+                            <div class="flex flex-wrap gap-3">
+                                <button onclick="sendMessageToAll()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm">
+                                    📢 Message All
+                                </button>
+                                <button onclick="exportWorkerData()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors text-sm">
+                                    📊 Export Data
+                                </button>
+                                <button onclick="scheduleCheckin()" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors text-sm">
+                                    📅 Schedule Check-in
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function generateWorkerList() {
+            const workers = [
+                { name: "Alex Johnson", rank: "Senior Worker", points: 1420, engagement: 95, status: "thriving", avatar: "🥇", subjects: { math: 92, science: 98, history: 94 }, lastActive: "2 hours ago", streak: 12 },
+                { name: "Emma Davis", rank: "Busy Bee", points: 1180, engagement: 88, status: "thriving", avatar: "🥈", subjects: { math: 85, science: 90, history: 89 }, lastActive: "1 hour ago", streak: 8 },
+                { name: "Marcus Chen", rank: "Active Bee", points: 980, engagement: 82, status: "good", avatar: "🥉", subjects: { math: 78, science: 87, history: 81 }, lastActive: "3 hours ago", streak: 5 },
+                { name: "Demo Worker", rank: "Busy Bee", points: 850, engagement: 75, status: "good", avatar: "🐝", subjects: { math: 60, science: 85, history: 80 }, lastActive: "Active now", streak: 5 },
+                { name: "Sarah Kim", rank: "New Bee", points: 245, engagement: 45, status: "struggling", avatar: "🆘", subjects: { math: 45, science: 42, history: 48 }, lastActive: "1 day ago", streak: 1 },
+                { name: "James Wilson", rank: "Worker Bee", points: 420, engagement: 65, status: "improving", avatar: "📈", subjects: { math: 62, science: 70, history: 64 }, lastActive: "5 hours ago", streak: 3 },
+                { name: "Maya Patel", rank: "Busy Bee", points: 750, engagement: 85, status: "good", avatar: "🐝", subjects: { math: 88, science: 82, history: 85 }, lastActive: "30 min ago", streak: 7 },
+                { name: "David Rodriguez", rank: "Active Bee", points: 680, engagement: 78, status: "good", avatar: "🐝", subjects: { math: 75, science: 80, history: 79 }, lastActive: "2 hours ago", streak: 4 }
+            ];
+
+            return workers.map(worker => `
+                <div class="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${getWorkerBorderColor(worker.status)}">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-3xl">${worker.avatar}</div>
+                            <div>
+                                <div class="font-semibold text-gray-900 dark:text-white">${worker.name}</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">${worker.rank} • ${worker.points} points • ${worker.streak} day streak</div>
+                                <div class="text-xs text-gray-500 mt-1">Last active: ${worker.lastActive}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <!-- Subject Performance -->
+                            <div class="hidden md:flex space-x-2">
+                                <div class="text-center">
+                                    <div class="text-xs text-gray-500">Math</div>
+                                    <div class="font-semibold ${getScoreColor(worker.subjects.math)}">${worker.subjects.math}%</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-xs text-gray-500">Science</div>
+                                    <div class="font-semibold ${getScoreColor(worker.subjects.science)}">${worker.subjects.science}%</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-xs text-gray-500">History</div>
+                                    <div class="font-semibold ${getScoreColor(worker.subjects.history)}">${worker.subjects.history}%</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Overall Engagement -->
+                            <div class="text-center">
+                                <div class="text-xs text-gray-500">Engagement</div>
+                                <div class="text-lg font-bold ${getEngagementColor(worker.engagement)}">${worker.engagement}%</div>
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="flex space-x-2">
+                                <button onclick="viewWorkerDetail('${worker.name}')" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition-colors">
+                                    View
+                                </button>
+                                <button onclick="messageWorker('${worker.name}')" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600 transition-colors">
+                                    Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getWorkerBorderColor(status) {
+            switch(status) {
+                case 'struggling': return 'border-l-4 border-red-400';
+                case 'improving': return 'border-l-4 border-yellow-400';
+                case 'good': return 'border-l-4 border-blue-400';
+                case 'thriving': return 'border-l-4 border-green-400';
+                default: return 'border-l-4 border-gray-400';
+            }
+        }
+
+        function getScoreColor(score) {
+            if (score >= 90) return 'text-green-600';
+            if (score >= 80) return 'text-blue-600';
+            if (score >= 70) return 'text-yellow-600';
+            return 'text-red-600';
+        }
+
+        function getEngagementColor(engagement) {
+            if (engagement >= 90) return 'text-green-600';
+            if (engagement >= 75) return 'text-blue-600';
+            if (engagement >= 60) return 'text-yellow-600';
+            return 'text-red-600';
+        }
+
+        function openHiveAnalytics() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-7xl w-full max-h-[90vh] overflow-y-auto">
+                    <!-- Modal Header -->
+                    <div class="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-6 rounded-t-2xl">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-3xl">📊</span>
+                                <div>
+                                    <h2 class="text-2xl font-bold">Hive Analytics Dashboard</h2>
+                                    <p class="text-amber-100">Track collaboration and learning progress across your hive</p>
+                                </div>
+                            </div>
+                            <button onclick="this.closest('.fixed').remove()" class="text-white hover:text-amber-200 transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Modal Content -->
+                    <div class="p-6">
+                        <!-- Time Period Selector -->
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Performance Overview</h3>
+                            <select class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-amber-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option value="week">This Week</option>
+                                <option value="month" selected>This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year">This Year</option>
+                            </select>
+                        </div>
+
+                        <!-- Key Metrics -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                            <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl p-6 text-center">
+                                <div class="text-3xl mb-2">🎯</div>
+                                <div class="text-2xl font-bold text-blue-600">87%</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Avg. Task Completion</div>
+                                <div class="text-xs text-green-600 mt-1">↗ +5% from last month</div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl p-6 text-center">
+                                <div class="text-3xl mb-2">🤝</div>
+                                <div class="text-2xl font-bold text-green-600">92%</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Collaboration Score</div>
+                                <div class="text-xs text-green-600 mt-1">↗ +3% from last month</div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-xl p-6 text-center">
+                                <div class="text-3xl mb-2">⏱️</div>
+                                <div class="text-2xl font-bold text-purple-600">23</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Avg. Study Minutes/Day</div>
+                                <div class="text-xs text-green-600 mt-1">↗ +8 min from last month</div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 rounded-xl p-6 text-center">
+                                <div class="text-3xl mb-2">🍯</div>
+                                <div class="text-2xl font-bold text-amber-600">85%</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Hive Health Score</div>
+                                <div class="text-xs text-green-600 mt-1">↗ +2% from last month</div>
+                            </div>
+                        </div>
+
+                        <!-- Charts Section -->
+                        <div class="grid md:grid-cols-2 gap-6 mb-8">
+                            <!-- Weekly Engagement Chart -->
+                            <div class="bg-white dark:bg-gray-700 rounded-xl p-6 border">
+                                <h4 class="text-lg font-semibold mb-4">📈 Weekly Engagement Trends</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm">Monday</span>
+                                        <div class="flex-1 mx-3 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                            <div class="bg-blue-500 h-2 rounded-full" style="width: 85%"></div>
+                                        </div>
+                                        <span class="text-sm font-semibold">85%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm">Tuesday</span>
+                                        <div class="flex-1 mx-3 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                            <div class="bg-blue-500 h-2 rounded-full" style="width: 92%"></div>
+                                        </div>
+                                        <span class="text-sm font-semibold">92%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm">Wednesday</span>
+                                        <div class="flex-1 mx-3 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                            <div class="bg-blue-500 h-2 rounded-full" style="width: 88%"></div>
+                                        </div>
+                                        <span class="text-sm font-semibold">88%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm">Thursday</span>
+                                        <div class="flex-1 mx-3 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                            <div class="bg-blue-500 h-2 rounded-full" style="width: 79%"></div>
+                                        </div>
+                                        <span class="text-sm font-semibold">79%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm">Friday</span>
+                                        <div class="flex-1 mx-3 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                            <div class="bg-blue-500 h-2 rounded-full" style="width: 95%"></div>
+                                        </div>
+                                        <span class="text-sm font-semibold">95%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Subject Performance -->
+                            <div class="bg-white dark:bg-gray-700 rounded-xl p-6 border">
+                                <h4 class="text-lg font-semibold mb-4">📚 Subject Performance</h4>
+                                <div class="space-y-4">
+                                    <div>
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="font-medium">Mathematics</span>
+                                            <span class="text-sm font-semibold">78%</span>
+                                        </div>
+                                        <div class="bg-gray-200 dark:bg-gray-600 rounded-full h-3">
+                                            <div class="bg-yellow-500 h-3 rounded-full" style="width: 78%"></div>
+                                        </div>
+                                        <div class="text-xs text-gray-500 mt-1">↘ -2% from last month</div>
+                                    </div>
+                                    
+                                    <div>
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="font-medium">Science</span>
+                                            <span class="text-sm font-semibold">87%</span>
+                                        </div>
+                                        <div class="bg-gray-200 dark:bg-gray-600 rounded-full h-3">
+                                            <div class="bg-green-500 h-3 rounded-full" style="width: 87%"></div>
+                                        </div>
+                                        <div class="text-xs text-green-500 mt-1">↗ +4% from last month</div>
+                                    </div>
+                                    
+                                    <div>
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="font-medium">History</span>
+                                            <span class="text-sm font-semibold">83%</span>
+                                        </div>
+                                        <div class="bg-gray-200 dark:bg-gray-600 rounded-full h-3">
+                                            <div class="bg-blue-500 h-3 rounded-full" style="width: 83%"></div>
+                                        </div>
+                                        <div class="text-xs text-green-500 mt-1">↗ +1% from last month</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Insights and Recommendations -->
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <!-- AI Insights -->
+                            <div class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-xl p-6 border border-indigo-200 dark:border-indigo-800">
+                                <h4 class="text-lg font-semibold mb-4 text-indigo-700 dark:text-indigo-300">🧠 AI Insights</h4>
+                                <div class="space-y-3 text-sm">
+                                    <div class="flex items-start space-x-2">
+                                        <span class="text-green-500 mt-1">✓</span>
+                                        <span>Collaboration activities show 15% higher completion rates than individual tasks</span>
+                                    </div>
+                                    <div class="flex items-start space-x-2">
+                                        <span class="text-yellow-500 mt-1">⚠</span>
+                                        <span>Math scores declining - consider peer tutoring sessions</span>
+                                    </div>
+                                    <div class="flex items-start space-x-2">
+                                        <span class="text-blue-500 mt-1">!</span>
+                                        <span>Friday shows highest engagement - ideal for challenging assignments</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Recommendations -->
+                            <div class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-xl p-6 border border-emerald-200 dark:border-emerald-800">
+                                <h4 class="text-lg font-semibold mb-4 text-emerald-700 dark:text-emerald-300">🎯 Recommended Actions</h4>
+                                <div class="space-y-3 text-sm">
+                                    <button onclick="implementRecommendation('math-support')" class="w-full text-left p-2 bg-white dark:bg-gray-600 rounded border hover:bg-gray-50 dark:hover:bg-gray-500 transition-colors">
+                                        📚 Create math study groups for struggling students
+                                    </button>
+                                    <button onclick="implementRecommendation('collaboration')" class="w-full text-left p-2 bg-white dark:bg-gray-600 rounded border hover:bg-gray-50 dark:hover:bg-gray-500 transition-colors">
+                                        🤝 Increase collaborative assignments to boost engagement
+                                    </button>
+                                    <button onclick="implementRecommendation('recognition')" class="w-full text-left p-2 bg-white dark:bg-gray-600 rounded border hover:bg-gray-50 dark:hover:bg-gray-500 transition-colors">
+                                        🏆 Recognize top collaborators to motivate others
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Export and Actions -->
+                        <div class="flex flex-wrap gap-3 pt-4 border-t">
+                            <button onclick="exportAnalytics()" class="bg-amber-500 text-white px-6 py-2 rounded-lg hover:bg-amber-600 transition-colors">
+                                📊 Export Full Report
+                            </button>
+                            <button onclick="scheduleAnalyticsReport()" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                                📅 Schedule Weekly Report
+                            </button>
+                            <button onclick="shareAnalytics()" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                📤 Share with Admin
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Supporting functions for worker management
+        function viewWorkerDetail(workerName) {
+            showCustomAlert(`📋 Opening detailed profile for ${workerName}... View individual progress, assignments, and collaboration history.`);
+        }
+
+        function messageWorker(workerName) {
+            showCustomAlert(`💬 Opening message composer for ${workerName}... Send personalized feedback and encouragement.`);
+        }
+
+        function sendMessageToAll() {
+            showCustomAlert(`📢 Opening bulk message composer... Send announcements or motivational messages to all worker bees.`);
+        }
+
+        function exportWorkerData() {
+            showCustomAlert(`📊 Exporting worker data... Download comprehensive performance reports for all students.`);
+        }
+
+        function scheduleCheckin() {
+            showCustomAlert(`📅 Opening check-in scheduler... Set up one-on-one meetings with students who need support.`);
+        }
+
+        // Supporting functions for analytics
+        function implementRecommendation(action) {
+            const actions = {
+                'math-support': 'Creating math support groups... Identifying struggling students and pairing with peer tutors.',
+                'collaboration': 'Increasing collaborative assignments... Converting 3 individual tasks to group projects.',
+                'recognition': 'Setting up recognition program... Creating "Collaborator of the Week" spotlight feature.'
+            };
+            showCustomAlert(`🎯 ${actions[action]}`);
+        }
+
+        function exportAnalytics() {
+            showCustomAlert(`📊 Exporting comprehensive analytics report... Generating PDF with all performance metrics and insights.`);
+        }
+
+        function scheduleAnalyticsReport() {
+            showCustomAlert(`📅 Setting up weekly analytics reports... You'll receive automated insights every Monday morning.`);
+        }
+
+        function shareAnalytics() {
+            showCustomAlert(`📤 Sharing analytics with administration... Sending summary report to principal and curriculum director.`);
+        }
+
+        function editTask(taskId) {
+            // Task editing functionality
+        }
+
+        function viewTaskResults(taskId) {
+            // Task results viewing functionality
+        }
+
+        function supportWorker(workerId) {
+            // Worker support functionality
+        }
+
+        function sendQueenMessage() {
+            const messageInput = document.getElementById('queenMessageInput');
+            const message = messageInput.value.trim();
+            if (message) {
+                showCustomAlert(`📢 Message sent to hive: "${message}"`);
+                messageInput.value = '';
+                
+                // Update the queen message in the worker view
+                const queenMessageElement = document.getElementById('queenMessage');
+                if (queenMessageElement) {
+                    queenMessageElement.textContent = `"${message}"`;
+                }
+            } else {
+                showCustomAlert('Please enter a message for your worker bees!');
+            }
+        }
+
+        // Mentor Bee AI Toggle Function
+        function toggleMentorBeeAI() {
+            const toggle = document.getElementById('aiTutorToggle');
+            const status = document.getElementById('mentorBeeStatus');
+            const configOptions = document.getElementById('aiConfigOptions');
+            
+            if (toggle.checked) {
+                hiveState.mentorBeeEnabled = true;
+                status.textContent = 'Active';
+                status.className = 'px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
+                configOptions.classList.remove('opacity-50');
+                updateMentorBeeButton();
+            } else {
+                hiveState.mentorBeeEnabled = false;
+                status.textContent = 'Disabled';
+                status.className = 'px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
+                configOptions.classList.add('opacity-50');
+                updateMentorBeeButton();
+            }
+        }
+
+        // Update the mentor bee button appearance based on AI status
+        function updateMentorBeeButton() {
+            const mentorButton = document.getElementById('mentorBeeButton');
+            if (mentorButton) {
+                if (hiveState.mentorBeeEnabled) {
+                    mentorButton.className = 'w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white p-4 rounded-lg hover:from-purple-600 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105';
+                    mentorButton.innerHTML = `
+                        <div class="flex items-center justify-center space-x-3">
+                            <span class="text-2xl animate-buzz">🐝</span>
+                            <div class="text-left">
+                                <div class="font-bold">Chat with Mentor Bee</div>
+                                <div class="text-sm opacity-90">Get instant help & guidance!</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    mentorButton.className = 'w-full bg-gray-400 text-gray-200 p-4 rounded-lg cursor-not-allowed opacity-60';
+                    mentorButton.innerHTML = `
+                        <div class="flex items-center justify-center space-x-3">
+                            <span class="text-2xl">🚫</span>
+                            <div class="text-left">
+                                <div class="font-bold">Mentor Bee Disabled</div>
+                                <div class="text-sm opacity-90">Ask your teacher for help instead</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Mentor Chat Functions
+        function sendMentorMessage() {
+            const input = document.getElementById('mentorChatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message to chat
+            addMentorChatMessage('user', message);
+            input.value = '';
+            
+            // Simulate AI response
+            setTimeout(() => {
+                const responses = getMentorBeeResponse(message);
+                addMentorChatMessage('mentor', responses);
+            }, 1000);
+        }
+
+        function sendQuickQuestion(type) {
+            const questions = {
+                'math': 'I need help with my math assignment. Can you explain quadratic equations?',
+                'science': 'I\'m struggling with chemistry concepts. Can you help me understand chemical bonds?',
+                'study-tips': 'What are some effective study techniques for better retention?',
+                'motivation': 'I\'m feeling overwhelmed with my workload. Can you help me stay motivated?'
+            };
+            
+            const message = questions[type];
+            document.getElementById('mentorChatInput').value = message;
+            sendMentorMessage();
+        }
+
+        function addMentorChatMessage(sender, message) {
+            const messagesContainer = document.getElementById('mentorChatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'flex items-start space-x-3';
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="text-2xl">🐝</div>
+                    <div class="bg-blue-100 dark:bg-blue-900/50 rounded-lg p-4 max-w-md">
+                        <p class="text-sm"><strong>You:</strong> ${message}</p>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="text-2xl">🐝</div>
+                    <div class="bg-white dark:bg-gray-600 rounded-lg p-4 max-w-md">
+                        <p class="text-sm"><strong>Mentor Bee:</strong> ${message}</p>
+                    </div>
+                `;
+            }
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function getMentorBeeResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            
+            if (lowerMessage.includes('math') || lowerMessage.includes('quadratic') || lowerMessage.includes('algebra')) {
+                return "I'd be happy to help with math! For quadratic equations, remember the standard form is ax² + bx + c = 0. You can solve them using factoring, completing the square, or the quadratic formula. Would you like me to walk you through a specific problem?";
+            } else if (lowerMessage.includes('science') || lowerMessage.includes('chemistry') || lowerMessage.includes('chemical')) {
+                return "Great science question! Chemical bonds are the forces that hold atoms together. There are three main types: ionic (electrons transferred), covalent (electrons shared), and metallic. What specific aspect would you like to explore further?";
+            } else if (lowerMessage.includes('study') || lowerMessage.includes('tips') || lowerMessage.includes('technique')) {
+                return "Here are some proven study techniques: 1) Active recall - test yourself instead of just re-reading, 2) Spaced repetition - review material at increasing intervals, 3) The Pomodoro Technique - 25-minute focused sessions with breaks. Which of these would you like to try first?";
+            } else if (lowerMessage.includes('motivat') || lowerMessage.includes('overwhelm') || lowerMessage.includes('stress')) {
+                return "It's completely normal to feel overwhelmed sometimes! Remember that you're part of a supportive hive. Try breaking big tasks into smaller steps, celebrate small wins, and don't hesitate to ask classmates for help. You've got this! 🐝💪";
+            } else if (lowerMessage.includes('help') || lowerMessage.includes('homework') || lowerMessage.includes('assignment')) {
+                return "I'm here to help! Can you tell me more specifically what subject or topic you're working on? Whether it's math, science, history, or study strategies, I can provide guidance tailored to your needs.";
+            } else {
+                return "That's an interesting question! I'm here to help you succeed in your studies. Feel free to ask me about math, science, study techniques, or if you need motivation. What specific topic would you like assistance with?";
+            }
+        }
+
+        function openSubscriptionModal() {
+            showCustomAlert('🏫 School pricing modal would open here - B2B focused plans!');
+        }
+
+        // Task Creation Method Selection
+        function selectTaskMethod(method) {
+            const contentArea = document.getElementById('taskCreationContent');
+            const taskForm = document.getElementById('taskDetailsForm');
+            
+            // Clear existing selections
+            document.querySelectorAll('.task-method-card').forEach(card => {
+                card.classList.remove('ring-2', 'ring-purple-500', 'border-purple-500');
+                card.classList.add('hover:border-red-400', 'hover:border-blue-400', 'hover:border-green-400', 'hover:border-purple-400');
+            });
+            
+            // Highlight selected method
+            event.currentTarget.classList.add('ring-2', 'ring-purple-500', 'border-purple-500');
+            
+            // Show task details form
+            taskForm.classList.remove('hidden');
+            
+            // Update content based on method
+            switch(method) {
+                case 'pdf':
+                    contentArea.innerHTML = `
+                        <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-6">
+                            <h4 class="text-lg font-semibold text-red-700 dark:text-red-400 mb-4">📄 Upload PDF Document</h4>
+                            <div class="border-2 border-dashed border-red-300 dark:border-red-600 rounded-lg p-8 text-center">
+                                <div class="text-4xl mb-4">📤</div>
+                                <p class="text-gray-600 dark:text-gray-400 mb-4">Drop your PDF file here or click to browse</p>
+                                <input type="file" accept=".pdf" class="hidden" id="pdfUpload" onchange="handlePDFUpload(this)">
+                                <button onclick="document.getElementById('pdfUpload').click()" class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition-colors">
+                                    Choose PDF File
+                                </button>
+                            </div>
+                            <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                                <p><strong>AI will extract:</strong></p>
+                                <ul class="list-disc list-inside mt-2 space-y-1">
+                                    <li>Key concepts and topics</li>
+                                    <li>Potential quiz questions</li>
+                                    <li>Learning objectives</li>
+                                    <li>Collaborative exercises</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'text':
+                    contentArea.innerHTML = `
+                        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6">
+                            <h4 class="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-4">📝 Convert Text to Questions</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Paste your content:</label>
+                                    <textarea id="textContent" rows="6" class="w-full px-3 py-2 border border-blue-300 dark:border-blue-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Paste your lesson content, notes, or study material here..."></textarea>
+                                </div>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Question Type:</label>
+                                        <select id="questionType" class="w-full px-3 py-2 border border-blue-300 dark:border-blue-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                            <option value="mixed">Mixed Questions</option>
+                                            <option value="multiple-choice">Multiple Choice</option>
+                                            <option value="short-answer">Short Answer</option>
+                                            <option value="essay">Essay Questions</option>
+                                            <option value="collaborative">Collaborative Tasks</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Difficulty Level:</label>
+                                        <select id="difficultyLevel" class="w-full px-3 py-2 border border-blue-300 dark:border-blue-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                            <option value="mixed">Mixed Difficulty</option>
+                                            <option value="beginner">Beginner</option>
+                                            <option value="intermediate">Intermediate</option>
+                                            <option value="advanced">Advanced</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button onclick="generateFromText()" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors font-medium">
+                                    🤖 Generate Questions from Text
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'similar':
+                    contentArea.innerHTML = `
+                        <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-6">
+                            <h4 class="text-lg font-semibold text-green-700 dark:text-green-400 mb-4">🔄 Generate Similar to Previous Tasks</h4>
+                            <div class="space-y-4">
+                                <p class="text-gray-600 dark:text-gray-400">Select a previous task to use as a template:</p>
+                                <div class="space-y-3">
+                                    <div class="border border-green-300 dark:border-green-600 rounded-lg p-4 hover:bg-green-100 dark:hover:bg-green-900/40 cursor-pointer transition-colors" onclick="selectPreviousTask('algebra')">
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <div class="font-semibold text-green-800 dark:text-green-300">Algebra Assignment</div>
+                                                <div class="text-sm text-gray-600 dark:text-gray-400">Math • 15 questions • Multiple choice & word problems</div>
+                                                <div class="text-xs text-green-600 dark:text-green-400 mt-1">✓ High engagement (92% completion)</div>
+                                            </div>
+                                            <input type="radio" name="previousTask" value="algebra" class="mt-1">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border border-green-300 dark:border-green-600 rounded-lg p-4 hover:bg-green-100 dark:hover:bg-green-900/40 cursor-pointer transition-colors" onclick="selectPreviousTask('chemistry')">
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <div class="font-semibold text-green-800 dark:text-green-300">Chemistry Pollen Analysis</div>
+                                                <div class="text-sm text-gray-600 dark:text-gray-400">Science • 12 questions • Lab exercises & theory</div>
+                                                <div class="text-xs text-green-600 dark:text-green-400 mt-1">✓ Collaborative success (88% team completion)</div>
+                                            </div>
+                                            <input type="radio" name="previousTask" value="chemistry" class="mt-1">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="border border-green-300 dark:border-green-600 rounded-lg p-4 hover:bg-green-100 dark:hover:bg-green-900/40 cursor-pointer transition-colors" onclick="selectPreviousTask('history')">
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <div class="font-semibold text-green-800 dark:text-green-300">History Hive Documentation</div>
+                                                <div class="text-sm text-gray-600 dark:text-gray-400">History • 10 questions • Research & analysis</div>
+                                                <div class="text-xs text-green-600 dark:text-green-400 mt-1">✓ Strong critical thinking development</div>
+                                            </div>
+                                            <input type="radio" name="previousTask" value="history" class="mt-1">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Modifications:</label>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="mr-2" checked> Change topic/subject matter
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="mr-2"> Adjust difficulty level
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="mr-2"> Modify question types
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="mr-2"> Add more collaboration
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="mr-2"> Include multimedia elements
+                                            </label>
+                                            <label class="flex items-center">
+                                                <input type="checkbox" class="mr-2"> Extend time requirements
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button onclick="generateSimilarTask()" class="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors font-medium">
+                                    🔄 Generate Similar Task
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'manual':
+                    contentArea.innerHTML = `
+                        <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-6">
+                            <h4 class="text-lg font-semibold text-purple-700 dark:text-purple-400 mb-4">✏️ Manual Task Creation</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Task Structure:</label>
+                                    <select id="taskStructure" class="w-full px-3 py-2 border border-purple-300 dark:border-purple-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" onchange="updateManualTaskOptions()">
+                                        <option value="questions">Question-based Task</option>
+                                        <option value="project">Project-based Task</option>
+                                        <option value="collaborative">Collaborative Exercise</option>
+                                        <option value="research">Research Assignment</option>
+                                        <option value="presentation">Presentation Task</option>
+                                    </select>
+                                </div>
+                                
+                                <div id="manualTaskOptions">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Number of Questions:</label>
+                                        <input type="number" id="numQuestions" class="w-full px-3 py-2 border border-purple-300 dark:border-purple-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" value="10" min="1" max="50">
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Learning Objectives:</label>
+                                    <textarea id="learningObjectives" rows="3" class="w-full px-3 py-2 border border-purple-300 dark:border-purple-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="What should worker bees learn from this task?"></textarea>
+                                </div>
+                                
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Collaboration Level:</label>
+                                        <select id="collaborationLevel" class="w-full px-3 py-2 border border-purple-300 dark:border-purple-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                            <option value="individual">Individual Work</option>
+                                            <option value="pairs">Pair Work</option>
+                                            <option value="small-group">Small Groups (3-4)</option>
+                                            <option value="large-group">Large Groups (5+)</option>
+                                            <option value="whole-class">Whole Class</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estimated Time:</label>
+                                        <select id="estimatedTime" class="w-full px-3 py-2 border border-purple-300 dark:border-purple-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                            <option value="15">15 minutes</option>
+                                            <option value="30">30 minutes</option>
+                                            <option value="45">45 minutes</option>
+                                            <option value="60">1 hour</option>
+                                            <option value="90">1.5 hours</option>
+                                            <option value="120">2 hours</option>
+                                            <option value="custom">Custom duration</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <button onclick="createManualTask()" class="w-full bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition-colors font-medium">
+                                    ✏️ Build Task Manually
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        // Supporting functions for task creation
+        function handlePDFUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                showCustomAlert(`📄 Uploaded "${file.name}"! AI will extract questions and create hive tasks.`);
+                // In a real implementation, this would upload and process the PDF
+            }
+        }
+
+        function generateFromText() {
+            const textContent = document.getElementById('textContent').value.trim();
+            if (!textContent) {
+                return;
+            }
+            // Generate questions from text functionality
+        }
+
+        function selectPreviousTask(taskType) {
+            document.querySelectorAll('input[name="previousTask"]').forEach(radio => {
+                radio.checked = false;
+            });
+            event.currentTarget.querySelector('input').checked = true;
+        }
+
+        function generateSimilarTask() {
+            const selected = document.querySelector('input[name="previousTask"]:checked');
+            if (!selected) {
+                return;
+            }
+            // Generate similar task functionality
+        }
+
+        function updateManualTaskOptions() {
+            const structure = document.getElementById('taskStructure').value;
+            const optionsDiv = document.getElementById('manualTaskOptions');
+            
+            switch(structure) {
+                case 'questions':
+                    optionsDiv.innerHTML = `
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Number of Questions:</label>
+                            <input type="number" id="numQuestions" class="w-full px-3 py-2 border border-purple-300 dark:border-purple-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" value="10" min="1" max="50">
+                        </div>
+                    `;
+                    break;
+                case 'project':
+                    optionsDiv.innerHTML = `
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Project Deliverables:</label>
+                            <textarea id="projectDeliverables" rows="2" class="w-full px-3 py-2 border border-purple-300 dark:border-purple-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="What should worker bees create or produce?"></textarea>
+                        </div>
+                    `;
+                    break;
+                case 'collaborative':
+                    optionsDiv.innerHTML = `
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Collaboration Goal:</label>
+                            <textarea id="collaborationGoal" rows="2" class="w-full px-3 py-2 border border-purple-300 dark:border-purple-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="What should worker bees accomplish together?"></textarea>
+                        </div>
+                    `;
+                    break;
+                case 'research':
+                    optionsDiv.innerHTML = `
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Research Focus:</label>
+                            <input type="text" id="researchFocus" class="w-full px-3 py-2 border border-purple-300 dark:border-purple-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="What topic should worker bees research?">
+                        </div>
+                    `;
+                    break;
+                case 'presentation':
+                    optionsDiv.innerHTML = `
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Presentation Length:</label>
+                            <select id="presentationLength" class="w-full px-3 py-2 border border-purple-300 dark:border-purple-600 rounded-lg focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option value="5">5 minutes</option>
+                                <option value="10">10 minutes</option>
+                                <option value="15">15 minutes</option>
+                                <option value="20">20 minutes</option>
+                                <option value="30">30 minutes</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        function createManualTask() {
+            // Manual task creation functionality
+        }
+
+        function createHiveTask() {
+            const taskName = document.getElementById('taskName').value.trim();
+            const taskSubject = document.getElementById('taskSubject').value;
+            const taskDueDate = document.getElementById('taskDueDate').value;
+            const taskPoints = document.getElementById('taskPoints').value;
+            const taskDescription = document.getElementById('taskDescription').value.trim();
+            
+            if (!taskName || !taskDueDate || !taskPoints || !taskDescription) {
+                showCustomAlert('Please fill in all required task details!');
+                return;
+            }
+            
+            // Close modal and show success
+            document.querySelector('.fixed').remove();
+            showCustomAlert(`🍯 Task "${taskName}" created successfully! Your worker bees can now contribute to this assignment.`);
+        }
+
+        // Initialize hive health checking
+        setInterval(() => {
+            if (Math.random() < 0.2) { // 20% chance to update hive status
+                updateHiveHealth();
+            }
+        }, 30000); // Every 30 seconds
+
+        function updateHiveHealth() {
+            // Update hive health based on collective worker performance
+            const healthMessages = [
+                "Hive efficiency improving through teamwork! 🍯",
+                "Workers collaborating beautifully! 🐝",
+                "Our collective efforts are paying off! 💪"
+            ];
+            
+            if (Math.random() < 0.7) { // 70% chance for positive message
+                const randomMessage = healthMessages[Math.floor(Math.random() * healthMessages.length)];
+                document.getElementById('queenMessage').textContent = `"${randomMessage}"`;
+            }
+        }
+
+        // Hide all student content when switching to Queen mode
+        function hideAllStudentContent() {
+            // Hide all main student sections
+            const studentContent = document.querySelector('div.max-w-6xl.mx-auto.px-4.py-6.space-y-8');
+            if (studentContent) {
+                studentContent.style.display = 'none';
+            }
+        }
+
+        // Hide queen dashboard when switching back to worker mode
+        function hideQueenDashboard() {
+            console.log('🧹 Cleaning up Queen Dashboard...');
+            
+            const queenDashboard = document.getElementById('queenDashboard');
+            if (queenDashboard) {
+                console.log('📋 Removing Queen Dashboard');
+                queenDashboard.remove();
+            }
+        }
+
+        // Show student content when switching back to Worker mode
+        function showAllStudentContent() {
+            const studentContent = document.querySelector('div.max-w-6xl.mx-auto.px-4.py-6.space-y-8');
+            if (studentContent) {
+                studentContent.style.display = 'block';
+            }
+        }
+
+        // Initialize the bee theme
+        document.addEventListener('DOMContentLoaded', function() {
+            updateHiveHealth();
+        });
+    </script>
+</body>
+</html>
